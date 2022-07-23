@@ -1,0 +1,14 @@
+originData_path: E:/1_Research/3_UAV_2/2_data/2_new_data
+output_path: E:/1_Research/3_UAV_2/2_data/4_trained_model/timeVar_8d_1_all
+csv_savePath: E:/1_Research/3_UAV_2/3_result/timeVar
+pkl_savePath: E:/1_Research/3_UAV_2/2_data/6_pkl_timeVar
+pkl_fileName: _201nf_201nc_1.00wl_0.50ws_8000lim_noise_24d.pkl
+mfcc_setting:
+    num_filter: 50
+    num_cep: 50
+    winlen: 
+    winstep: 
+    fs: 44100
+    mfcc_d1_switch: False
+    mfcc_d2_switch: False
+    highfreq_limit: 8000

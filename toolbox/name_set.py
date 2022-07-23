@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # ****************************************************************************
+name_set_list = ['prefix','date','drone_No','state','distance','index','suffix']
 # Drone attribute
 name_set_drone = {}
 name_set_drone['prefix'] = ['_uav_', '_noise_']

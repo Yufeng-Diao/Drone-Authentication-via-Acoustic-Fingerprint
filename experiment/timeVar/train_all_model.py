@@ -9,6 +9,7 @@ import os
 import sys
 import re
 import time 
+import yaml
 # Add the top level directory in system path
 top_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 if not top_path in sys.path:
@@ -16,22 +17,19 @@ if not top_path in sys.path:
 
 from runners import Mid_runner_train
 from toolbox.name_set import drone_set
+from toolbox.name_set import name_set_list
 from toolbox import train_tool
 
-def main(args):
+def main(args, config):
     # The settign of the mfcc
-    args.mfcc = {}
-    args.mfcc['num_filter'] = 50
-    args.mfcc['num_cep'] = 50
-    # args.mfcc['winlen'] = 0.82
-    # args.mfcc['winstep'] = 0.41
-    args.mfcc['fs'] = 44100
-    # Invalid for pkl mode (just for now)
-    args.mfcc['mfcc_d1_switch'] = False
-    args.mfcc['mfcc_d2_switch'] = False
+    args.mfcc = config['mfcc_setting']
+    # Path to find stored data
+    args.originData_path = config['mfcc_setting']
+    # Path to store trained model
+    args.output_path = config['output_path']
+    # args.csv_savePath = r''
+    args.pkl_savePath = config['pkl_savePath']
     
-    # All valid key
-    name_set_list = ['prefix','date','drone_No','state','distance','index','suffix']
     # Predefine the key of the dic
     args.dic_choose = dict([(k,[]) for k in name_set_list])
     args.dic_aban = dict([(k,[]) for k in name_set_list])
@@ -44,15 +42,6 @@ def main(args):
     #                               '_d9_','_d10_','_d11_','_d12_','_d13_','_d14_','_d15_','_d16_',
     #                               '_d17_','_d18_','_d19_','_d20_','_d21_','_d22_','_d23_','_d24_']
     args.dic_choose["drone_No"] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_']
-    # Path to find stored data
-    args.originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
-    # Path to store trained model
-    args.output_path = r'E:\1_Research\3_UAV_2\2_data\11_before_pub'
-    # _method_date_filter_cep_winlen_winstep_fs_d1_d2_.m
-    # args.output_name = model_name(args)
-    # print(args.output_name)
-    # args.csv_savePath = r''
-    args.pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\6_pkl_timeVar'
     
     time_start = time.time()
     # Train all models
@@ -98,4 +87,8 @@ if __name__ == '__main__':
     args.model_save = True
     args.pkl_use = True
     
-    main(args)
+    with open(os.path.join(top_path, 'config/config_timeVar.yml'),'r') as f:
+        content = f.read()
+        config = yaml.load(content, Loader=yaml.SafeLoader)
+        
+    main(args, config)

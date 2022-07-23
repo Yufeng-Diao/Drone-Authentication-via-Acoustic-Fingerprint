@@ -8,6 +8,7 @@ Created on Wed Apr 20 17:45:33 2022
 import os
 import sys
 import time
+import yaml
 # Add the top level directory in system path
 top_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 if not top_path in sys.path:
@@ -20,22 +21,22 @@ import wave
 import toolbox.info_detector_drone as idd
 from toolbox.MFCC_extract import mfcc_extract
 from toolbox.name_set import name_set_drone
-from toolbox.name_set import drone_set
+from toolbox.name_set import name_set_list
 from toolbox import audio_processing as ap
 from toolbox import pkl_gen_tool as pgt
 
+with open(os.path.join(top_path, 'config/config_filterVar_gen.yml'),'r') as f:
+    content = f.read()
+    config = yaml.load(content, Loader=yaml.SafeLoader)
+
 # Declare the setting of MFCC
-mfcc_setting = {}
-mfcc_setting['num_filter'] = 26
-mfcc_setting['num_cep'] = 26
-mfcc_setting['winlen'] = 1
-mfcc_setting['winstep'] = 0.5
-mfcc_setting['fs'] = 44100
-mfcc_setting['mfcc_d1_switch'] = True
-mfcc_setting['mfcc_d2_switch'] = True
-mfcc_setting['highfreq_limit'] = 8000
-# All valid key
-name_set_list = ['prefix','date','drone_No','state','distance','index','suffix']
+mfcc_setting = config['mfcc_setting']
+# Path to find stored data
+originData_path = config['originData_path']
+# Path to save csv
+pkl_savePath = config['pkl_savePath']
+# Signal to noise ratio
+snr = config['snr']
 
 dic_choose = dict([(k,[]) for k in name_set_list])
 dic_aban = dict([(k,[]) for k in name_set_list])
@@ -45,25 +46,17 @@ dic_choose["date"] = ['_20220304_', '_20220307_', '_20220312_', '_20220318_', '_
                        '_20220327_', '_20220328_', '_20220329_', '_20220330_', '_20220331_', 
                        '_20220401_', '_20220402_', '_20220403_', '_20220404_', '_20220405_']
 
-# dic_choose["date"] = ['_20220304_', '_20220328_']
 dic_choose["distance"] = ['_1m_','_5m_']
 dic_choose['drone_No'] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_',
                           '_d9_','_d10_','_d11_','_d12_','_d13_','_d14_','_d15_','_d16_',
                           '_d17_','_d18_','_d19_','_d20_','_d21_','_d22_','_d23_','_d24_']
 
-# Path to find stored data
-originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
-# Path to save csv
-pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\8_pkl_filterVar_noise'
-# Signal to noise ratio
-snr = 0
-
 
 if __name__ == '__main__':
-    mfcc_setting['num_filter'] = 21
-    mfcc_setting['num_cep'] = 21
+    # mfcc_setting['num_filter'] = 21
+    # mfcc_setting['num_cep'] = 21
     time_start = time.time()
-    for _ in range(3):
+    for _ in range(50):
         mfcc_setting['num_filter'] = mfcc_setting['num_filter'] + 5
         mfcc_setting['num_cep'] = mfcc_setting['num_filter']
         

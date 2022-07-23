@@ -10,6 +10,7 @@ import os
 import sys
 # import re
 import time 
+import yaml
 # Add the top level directory in system path
 top_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 if not top_path in sys.path:
@@ -20,22 +21,20 @@ import numpy as np
 from experiment.attack.mid_runner_train_attack import Mid_runner_train
 # from toolbox.name_set import drone_set
 from toolbox.name_set import name_set_drone
+from toolbox.name_set import name_set_list
 from toolbox import train_tool
 
-def main(args):
+def main(args, config):
     # The settign of the mfcc
-    args.mfcc = {}
-    # args.mfcc['num_filter'] = 50
-    # args.mfcc['num_cep'] = 50
-    args.mfcc['winlen'] = 1
-    args.mfcc['winstep'] = 0.5
-    args.mfcc['fs'] = 44100
+    args.mfcc = config['mfcc_setting']
+    # Path to find stored data
+    args.originData_path = config['originData_path']
+    # Path to store trained model
+    args.output_path = config['output_path']
+    args.csv_savePath = config['csv_savePath']
+    args.pkl_savePath = config['pkl_savePath']
+    args.pkl_fileName = config['pkl_fileName']
     
-    args.mfcc['mfcc_d1_switch'] = False
-    args.mfcc['mfcc_d2_switch'] = False
-    
-    # All valid key
-    name_set_list = ['prefix','date','drone_No','state','distance','index','suffix']
     # Predefine the key of the dic
     args.dic_choose = dict([(k,[]) for k in name_set_list])
     args.dic_aban = dict([(k,[]) for k in name_set_list])
@@ -45,39 +44,16 @@ def main(args):
                               '_20220401_', '_20220402_', '_20220403_', '_20220404_', '_20220405_',
                               '_2022noise_']
     
-    # args.dic_choose["drone_No"] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_',
-    #                               '_d9_','_d10_','_d11_','_d12_','_d13_','_d14_','_d15_','_d16_',
-    #                               '_d17_','_d18_','_d19_','_d20_','_d21_','_d22_','_d23_','_d24_',
-    #                               '_n_']
-    
     dic_reg, dic_attack, args.bg_type = dic_gen()
     dic_string(dic_reg, 'dic_reg')
     dic_string(dic_attack, 'dic_attack')
     dic_string(args.bg_type, 'args.bg_type')
     
-    
     args.dic_choose["drone_No"] = dic_reg + args.bg_type
     args.dic_choose["drone_No"].sort(key=name_set_drone["drone_No"].index)
-    
     # print(args.dic_choose["drone_No"])
 
-    # Path to find stored data
-    args.originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
-    # Path to store trained model
-    args.output_path = r'E:\1_Research\3_UAV_2\2_data\10_pkl_attack\10'
-    # _method_date_filter_cep_winlen_winstep_fs_d1_d2_.m
-    # args.output_name = model_name(args)
-    # print(args.output_name)
-    args.csv_savePath = r''
-    args.pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\10_pkl_attack'
     time_start = time.time()
-    # Train all models
-    
-    args.pkl_fileName = r'_201nf_201nc_1.00wl_0.50ws_8000lim_noise_24d.pkl'
-    # Number of using filters
-    args.mfcc['num_filter'] = 201
-    # Number of using features on each dimension
-    args.mfcc['num_cep'] = 201
     # Iterate on all methods
     for j in range(8):
         train_tool.mutual_exclusive(args, j)
@@ -146,4 +122,8 @@ if __name__ == '__main__':
     args.model_save = True
     args.pkl_use = True
     
-    main(args)
+    with open(os.path.join(top_path, 'config/config_attack.yml'),'r') as f:
+        content = f.read()
+        config = yaml.load(content, Loader=yaml.SafeLoader)
+    
+    main(args, config)

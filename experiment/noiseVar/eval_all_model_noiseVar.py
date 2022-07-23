@@ -9,7 +9,7 @@ import argparse
 import time
 import os
 import sys
-
+import yaml
 # Add the top level directory in system path
 top_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 if not top_path in sys.path:
@@ -22,22 +22,22 @@ from runners import Mid_runner_eval
 from experiment.timeVar.mid_runner_eval_timeVar import Mid_runner_eval_timeVar
 from toolbox.name_set import drone_set
 from toolbox.name_set import name_set_csv
+from toolbox.name_set import name_set_list
 
-
-def main(args):
+def main(args, config):
     # The settign of the mfcc
-    args.mfcc = {}
-    args.mfcc['num_filter'] = 201
-    args.mfcc['num_cep'] = 201
-    args.mfcc['winlen'] = 1
-    args.mfcc['winstep'] = 0.5
-    args.mfcc['fs'] = 44100
-    args.mfcc['mfcc_d1_switch'] = False
-    args.mfcc['mfcc_d2_switch'] = False
+    args.mfcc = config['mfcc_setting']
+    # Path to find stored data
+    # args.originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
+    # Path to store trained model
+    args.model_path = config['output_path']
+    # Path to save or load the features and labels
+    args.csv_savePath = config['csv_savePath']
+    # The Path of pkl file
+    args.pkl_savePath = config['pkl_savePath']
+    
     snr = 12.00
     
-    # All valid key
-    name_set_list = ['prefix','date','drone_No','state','distance','index','suffix']
     # Predefine the key of the dic
     args.dic_choose = dict([(k,[]) for k in name_set_list])
     args.dic_aban = dict([(k,[]) for k in name_set_list])
@@ -52,23 +52,10 @@ def main(args):
     
     # args.dic_choose["drone_No"] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_']
     
-    # Path to find stored data
-    # args.originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
-    # Path to store trained model
-    args.model_path = r'E:\1_Research\3_UAV_2\2_data\4_trained_model\201nf_201nc_1.00wl_0.50ws_24d'
-    # args.model_name = r'_QDA_50nf_50nc_0.8wl_0.4ws_0304_0307_0312_0318_0319_0327_0328_0329_0330_0331_0401_0402_0403_0404_0405_.m'
-    # Path to save or load the features and labels
-    args.csv_savePath = r'E:\1_Research\3_UAV_2\3_result\noiseVar'
-    
-    # The Path of pkl file
-    args.pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\9_pkl_noiseVar'
-    # In this case, this variable is not important
-    # args.pkl_fileName = r'_50nf_50nc_0.8wl_0.4ws_8000lim.pkl'
-    
     model_list = ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
     # model_list = ['_LSVM_']
     
-    accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
+    # accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
     
     time_start = time.time()
     for _ in range(12):
@@ -113,4 +100,8 @@ if __name__ == '__main__':
     
     args.pkl_use = True
 
-    main(args)
+    with open(os.path.join(top_path, 'config/config_noNoise.yml'),'r') as f:
+        content = f.read()
+        config = yaml.load(content, Loader=yaml.SafeLoader)
+        
+    main(args, config)
