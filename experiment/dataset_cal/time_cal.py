@@ -22,76 +22,8 @@ from toolbox.MFCC_extract import mfcc_extract
 from toolbox.name_set import name_set_drone
 from toolbox.name_set import drone_set
 from toolbox import audio_processing as ap
+from toolbox import pkl_gen_tool as pgt
 
-def audio_select(originData_path, dic_choose, dic_aban, \
-                 date, distance, drone, name_check):
-    # Store audio data and label
-    audio = []
-    audio_label = []
-    for root, dirs, files in os.walk(originData_path):
-        for i in range(len(files)):
-            name, label = name_check.info_detector(files[i],"drone_No")
-            if name_check.check_file_choose(name, dic_choose) \
-                and not(name_check.check_file_aban(name, dic_aban)) \
-                and files[i].find(date)!=-1 and files[i].find(distance)!=-1 \
-                and files[i].find(drone)!=-1:
-                    
-                audio.append(wave.open(root+'/'+files[i]))
-                audio_label.append(label)
-                print("Choose %s"%files[i])
-            else:
-                # print("abandon %s"%files[i])
-                pass
-    return audio, audio_label
-
-def train_eval_split(audio_data, audio_label):
-    train_data = []
-    eval_data = []
-    
-    train_label = []
-    eval_label = []
-    for data in audio_data:
-        seg_point = []
-        seg_point.append(int(len(data)*0.2))
-        seg_point.append(int(len(data)*0.35))
-        seg_point.append(int(len(data)*0.65))
-        seg_point.append(int(len(data)*0.8))
-        
-        train_data.append(data[0:seg_point[0]])
-        train_data.append(data[seg_point[1]:seg_point[2]])
-        train_data.append(data[seg_point[3]:])
-        
-        eval_data.append(data[seg_point[0]:seg_point[1]])
-        eval_data.append(data[seg_point[2]:seg_point[3]])
-        
-    for i in audio_label:
-        train_label.append(i)
-        train_label.append(i)
-        train_label.append(i)
-        eval_label.append(i)
-        eval_label.append(i)
-    
-    return train_data, train_label, eval_data, eval_label
-
-def dic_quick_check(dic_choose, dic_aban, name_check):
-    # Check the format of the dic_choose
-    if not(name_check.check_dic(dic_choose)):
-        print("The format of the dic_choose is wrong!")
-        sys.exit()
-    # Check the format of the dic_aban
-    if not(name_check.check_dic(dic_aban)):
-        print("The format of the dic_aban is wrong!")
-        sys.exit()
-
-# def gen_name(status, prefix, date, mfcc_setting, drone_select):
-#     file_name = '_%s_%s%s%inf_%inc_%.1fwl_%.1fws_%s_.csv'%(
-#                                                 status, prefix, date,
-#                                                 mfcc_setting['num_filter'],
-#                                                 mfcc_setting['num_cep'],
-#                                                 mfcc_setting['winlen'],
-#                                                 mfcc_setting['winstep'],
-#                                                 drone_select)
-#     return file_name
 
 # Declare the setting of MFCC
 mfcc_setting = {}
@@ -125,7 +57,7 @@ dic_choose['drone_No'] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_
 # Path to find stored data
 originData_path = r'E:\1_Research\3_UAV_2\2_data\2_new_data'
 # Path to save csv
-pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\pkl_test'
+
 
 drone_dic = dict([(k,0) for k in dic_choose['drone_No']])
 
@@ -134,14 +66,14 @@ if __name__ == '__main__':
     # Build the databse for iteration
     pkl_database = pd.DataFrame([])
     name_check = idd.FileNameProcessing(name_set_drone)
-    dic_quick_check(dic_choose, dic_aban, name_check)
+    pgt.dic_quick_check(dic_choose, dic_aban, name_check)
     
     # Save csv for each date
     for date in dic_choose["date"]:
         for distance in dic_choose['distance']:
             for drone in dic_choose['drone_No']:
                 audio_data = []
-                audio, audio_label = audio_select(originData_path, 
+                audio, audio_label = pgt.audio_select(originData_path, 
                                                   dic_choose, dic_aban, 
                                                   date, distance, drone, 
                                                   name_check)
@@ -153,6 +85,6 @@ if __name__ == '__main__':
                 params = audio[0].getparams()
                 drone_dic[drone] = drone_dic[drone] + params[3]/params[2]
                 
-                
+    print(drone_dic)
     time_end = time.time()
     print("Total running time: %f s"%(time_end-time_start))

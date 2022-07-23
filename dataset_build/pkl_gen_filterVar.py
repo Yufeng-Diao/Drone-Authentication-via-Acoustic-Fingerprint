@@ -5,7 +5,7 @@ Created on Fri Apr 15 15:35:37 2022
 @author: Eidos
 """
 
-
+import argparse
 import os
 import sys
 import time
@@ -60,8 +60,6 @@ pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\11_before_pub\filterVar'
 
 
 if __name__ == '__main__':
-    # mfcc_setting['num_filter'] = 221
-    # mfcc_setting['num_cep'] = 221
     time_start = time.time()
     for _ in range(50):
         mfcc_setting['num_filter'] = mfcc_setting['num_filter'] + 5
@@ -91,54 +89,12 @@ if __name__ == '__main__':
                     
                     train_data, train_label, eval_data, eval_label = pgt.train_eval_split(audio_data, audio_label)
                     # Generate train data
-                    train_mfcc, _ = \
-                        mfcc_extract(train_data, train_label, 
-                                      num_filter = mfcc_setting['num_filter'],
-                                      num_cep = mfcc_setting['num_cep'], 
-                                      winlen = mfcc_setting['winlen'], 
-                                      winstep = mfcc_setting['winstep'], 
-                                      fs = mfcc_setting['fs'],
-                                      mfcc_d1_switch = mfcc_setting['mfcc_d1_switch'], 
-                                      mfcc_d2_switch = mfcc_setting['mfcc_d2_switch'],
-                                      first_feat = True, feature_norm = True, 
-                                      highfreq = mfcc_setting['highfreq_limit'])
-                        
-                    train_pd = pd.DataFrame(train_mfcc)
-                    # Set the multiIndex of rows
-                    train_pd = train_pd.set_index([pd.Series(['train']*len(train_pd)),
-                                                   pd.Series([date]*len(train_pd)),
-                                                   pd.Series([distance]*len(train_pd)),
-                                                   pd.Series([drone]*len(train_pd))])
-                    # Set the multiIndex of columns
-                    train_pd.columns = pd.MultiIndex.from_product([pd.Series(['0_mfcc','1_mfcc','2_mfcc']),
-                                                                   range(mfcc_setting['num_cep'])],
-                                                                  names=['dimension','SN'])
+                    train_pd = pgt.mul_df_gen(train_data, train_label, mfcc_setting, 
+                                              date, distance, drone, process = 'train')
                     pkl_database = pkl_database.append(train_pd)
-                    
-                    eval_mfcc, _ = \
-                        mfcc_extract(eval_data, eval_label, 
-                                      num_filter = mfcc_setting['num_filter'],
-                                      num_cep = mfcc_setting['num_cep'], 
-                                      winlen = mfcc_setting['winlen'], 
-                                      winstep = mfcc_setting['winstep'], 
-                                      fs = mfcc_setting['fs'],
-                                      mfcc_d1_switch = mfcc_setting['mfcc_d1_switch'], 
-                                      mfcc_d2_switch = mfcc_setting['mfcc_d2_switch'],
-                                      first_feat = True, feature_norm = True, 
-                                      highfreq = mfcc_setting['highfreq_limit'])
-                    
-                    eval_pd = pd.DataFrame(eval_mfcc)
-                    # Set the multiIndex of rows
-                    eval_pd = eval_pd.set_index([pd.Series(['eval']*len(eval_pd)),
-                                                 pd.Series([date]*len(eval_pd)),
-                                                 pd.Series([distance]*len(eval_pd)),
-                                                 pd.Series([drone]*len(eval_pd))])
-                    eval_pd.index.names = ['mode', 'date', 'distance', 'drone_No']
-                    # Set the multiIndex of columns
-                    eval_pd.columns = pd.MultiIndex.from_product([pd.Series(['0_mfcc','1_mfcc','2_mfcc']),
-                                                                  range(mfcc_setting['num_cep'])],
-                                                                  names=['dimension','SN'])
-                    
+                    # Generate eval data
+                    eval_pd = pgt.mul_df_gen(eval_data, eval_label, mfcc_setting, 
+                                             date, distance, drone, process = 'eval')
                     pkl_database = pkl_database.append(eval_pd)
         
         name_output = '_%inf_%inc_%.2fwl_%.2fws_%dlim.pkl'%(mfcc_setting['num_filter'],

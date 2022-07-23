@@ -16,6 +16,7 @@ if not top_path in sys.path:
 
 from runners import Mid_runner_train
 from toolbox.name_set import drone_set
+from toolbox import train_tool
 
 def main(args):
     # The settign of the mfcc
@@ -50,8 +51,9 @@ def main(args):
     # _method_date_filter_cep_winlen_winstep_fs_d1_d2_.m
     # args.output_name = model_name(args)
     # print(args.output_name)
-    args.csv_savePath = r''
+    # args.csv_savePath = r''
     args.pkl_savePath = r'E:\1_Research\3_UAV_2\2_data\6_pkl_timeVar'
+    
     time_start = time.time()
     # Train all models
     for root, dirs, files in os.walk(args.pkl_savePath):
@@ -61,56 +63,14 @@ def main(args):
             args.mfcc['winlen'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}wl_', files[i]).group()).group())
             args.mfcc['winstep'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}ws_', files[i]).group()).group())
             for j in range(8):
-                mutual_exclusive(args, j)
-                args.output_name = model_name(args)
+                train_tool.mutual_exclusive(args, j)
+                args.output_name = train_tool.model_name(args)
         
                 runner = Mid_runner_train(args)
                 runner.run()
                 time_end = time.time()
                 print('Time comsuming now: %f s'%(time_end-time_start))
 
-# This function should be changed in th future, because I do not consider drone range.
-def model_name(args):
-    if args.qda:
-        model_name = '_QDA_'
-    elif args.lda:
-        model_name = '_LDA_'
-    elif args.lsvm:
-        model_name = '_LSVM_'
-    elif args.svm:
-        model_name = '_SVM_'
-    elif args.knn:
-        model_name = '_KNN_'
-    elif args.dt:
-        model_name = '_DT_'
-    elif args.rf:
-        model_name = '_RF_'
-    elif args.gnb:
-        model_name = '_GNB_'
-    else:
-        model_name = None
-    
-    name_output = '%s%inf_%inc_%.2fwl_%.2fws_'%(model_name,
-                                                args.mfcc['num_filter'],
-                                                args.mfcc['num_cep'],
-                                                args.mfcc['winlen'],
-                                                args.mfcc['winstep'])
-
-    name_output = name_output + '.m'
-    return name_output
-
-def mutual_exclusive(args, pos):
-    me_list = [False, False, False, False, False, False, False, False]
-    me_list[pos] = True
-    
-    args.qda = me_list[0]
-    args.lda = me_list[1]
-    args.lsvm = me_list[2]
-    args.svm = me_list[3]
-    args.knn = me_list[4]
-    args.dt = me_list[5]
-    args.rf = me_list[6]
-    args.gnb = me_list[7]
 
 if __name__ == '__main__':
     

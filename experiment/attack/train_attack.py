@@ -8,7 +8,7 @@ Created on Tue May  3 22:03:06 2022
 import argparse
 import os
 import sys
-import re
+# import re
 import time 
 # Add the top level directory in system path
 top_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -18,8 +18,9 @@ if not top_path in sys.path:
 import numpy as np
 
 from experiment.attack.mid_runner_train_attack import Mid_runner_train
-from toolbox.name_set import drone_set
+# from toolbox.name_set import drone_set
 from toolbox.name_set import name_set_drone
+from toolbox import train_tool
 
 def main(args):
     # The settign of the mfcc
@@ -79,56 +80,14 @@ def main(args):
     args.mfcc['num_cep'] = 201
     # Iterate on all methods
     for j in range(8):
-        mutual_exclusive(args, j)
-        args.output_name = model_name(args)
+        train_tool.mutual_exclusive(args, j)
+        args.output_name = train_tool.model_name(args)
 
         runner = Mid_runner_train(args)
         runner.run()
         time_end = time.time()
         print('Time comsuming now: %f s'%(time_end-time_start))
 
-# This function should be changed in th future, because I do not consider drone range.
-def model_name(args):
-    if args.qda:
-        model_name = '_QDA_'
-    elif args.lda:
-        model_name = '_LDA_'
-    elif args.lsvm:
-        model_name = '_LSVM_'
-    elif args.svm:
-        model_name = '_SVM_'
-    elif args.knn:
-        model_name = '_KNN_'
-    elif args.dt:
-        model_name = '_DT_'
-    elif args.rf:
-        model_name = '_RF_'
-    elif args.gnb:
-        model_name = '_GNB_'
-    else:
-        model_name = None
-    # Change a little for using different number of features
-    name_output = '%s%inf_%inc_%.2fwl_%.2fws_attack'%(model_name,
-                                                args.mfcc['num_filter'],
-                                                args.mfcc['num_cep'],
-                                                args.mfcc['winlen'],
-                                                args.mfcc['winstep'])
-
-    name_output = name_output + '.m'
-    return name_output
-
-def mutual_exclusive(args, pos):
-    me_list = [False, False, False, False, False, False, False, False]
-    me_list[pos] = True
-    
-    args.qda = me_list[0]
-    args.lda = me_list[1]
-    args.lsvm = me_list[2]
-    args.svm = me_list[3]
-    args.knn = me_list[4]
-    args.dt = me_list[5]
-    args.rf = me_list[6]
-    args.gnb = me_list[7]
 
 def dic_gen():
     dic_all = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_',

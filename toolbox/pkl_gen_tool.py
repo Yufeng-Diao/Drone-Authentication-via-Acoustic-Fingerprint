@@ -121,3 +121,28 @@ def wgn(x, snr):
 
 def wgn_add(x, snr):
     return x + wgn(x, snr)#.astype(np.short)
+
+def mul_df_gen(train_data, train_label, mfcc_setting, date, distance, drone, process = "train"):
+    train_mfcc, _ = \
+        mfcc_extract(train_data, train_label, 
+                      num_filter = mfcc_setting['num_filter'],
+                      num_cep = mfcc_setting['num_cep'], 
+                      winlen = mfcc_setting['winlen'], 
+                      winstep = mfcc_setting['winstep'], 
+                      fs = mfcc_setting['fs'],
+                      mfcc_d1_switch = mfcc_setting['mfcc_d1_switch'], 
+                      mfcc_d2_switch = mfcc_setting['mfcc_d2_switch'],
+                      first_feat = True, feature_norm = True, 
+                      highfreq = mfcc_setting['highfreq_limit'])
+        
+    train_pd = pd.DataFrame(train_mfcc)
+    # Set the multiIndex of rows
+    train_pd = train_pd.set_index([pd.Series([process]*len(train_pd)),
+                                   pd.Series([date]*len(train_pd)),
+                                   pd.Series([distance]*len(train_pd)),
+                                   pd.Series([drone]*len(train_pd))])
+    # Set the multiIndex of columns
+    train_pd.columns = pd.MultiIndex.from_product([pd.Series(['0_mfcc','1_mfcc','2_mfcc']),
+                                                   range(mfcc_setting['num_cep'])],
+                                                  names=['dimension','SN'])
+    return train_pd
