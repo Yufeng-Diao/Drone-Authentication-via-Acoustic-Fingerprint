@@ -118,7 +118,7 @@ def audio_fft(audio_clip, nfft, origin_normalize=False, fft_normalize=True):
         Batch * Data
 
     '''
-    # 对原始数据归一化
+    # 
     if origin_normalize:
         audio_clip_max = audio_clip.max(1).reshape(-1,1)
         audio_clip_min = audio_clip.min(1).reshape(-1,1)

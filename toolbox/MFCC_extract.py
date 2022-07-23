@@ -85,7 +85,7 @@ def mfcc_zero_dimension(audio_data, audio_label, num_filter=101, num_cep=101,
     wave_label_all = None
     
     for i in range(0,len(audio_data)):
-        print('Processing file No. ', i)
+        # print('Processing file No. ', i)
         # filter low frequency noise
         # wave_data_left[i] = ap.audio_filter(wave_data_left[i], cutOff_freq=200)
         # extract MFCC
