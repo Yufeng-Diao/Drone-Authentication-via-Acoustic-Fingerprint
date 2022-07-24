@@ -53,34 +53,42 @@ def main(args, config):
     model_list = ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
     
     # accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
-
-    args.mfcc['winlen'] = -0.03
+    # Create the header of csv file
+    accuracy_list = model_list.copy()
+    accuracy_list.insert(0,'')
+    accuracy_list = np.array(accuracy_list).reshape(1,-1)
+    accuracy_pd = pd.DataFrame(accuracy_list)
+    accuracy_pd.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=False, index=False, mode='a')
+    
+    args.mfcc['winlen'] = 0.02 - 0.05
     time_start = time.time()
-    for _ in range(1):
+    for _ in range(51):
         accuracy_list = []
         args.mfcc['winlen'] = args.mfcc['winlen'] + 0.05
-        args.mfcc['winstep'] = round(args.mfcc['winlen']/2,2)
+        args.mfcc['winstep'] = round(args.mfcc['winlen']/2,3)
         args.pkl_fileName ='_50nf_50nc_%.2fwl_%.2fws_8000lim.pkl'%(args.mfcc['winlen'], 
                                                                    args.mfcc['winstep'])
-        for model in model_list:
-            args.model_name = '%s50nf_50nc_%.2fwl_%.2fws_.m'%(model, 
-                                                              args.mfcc['winlen'], 
-                                                              args.mfcc['winstep'])
-            
-            # Train the model
-            runner = Mid_runner_eval_timeVar(args)
-            accuracy = runner.run()
-            accuracy_list.append(accuracy)
-        # store result
-        # Generate the new dataframe and transpose it. The shape should be like (1,6)
-        accuracy_pd = pd.DataFrame({str(args.mfcc['winlen']):accuracy_list}).T
-        # Change the name of the columns. 
-        accuracy_pd.columns = model_list
-        # Add this new row to the summary table
-        # accuracy_pd_all = pd.concat([accuracy_pd_all,accuracy_pd])
-        accuracy_pd.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=False, index=False, mode='a')
-        time_end = time.time()
-        print('Time comsuming now: %f s'%(time_end-time_start))
+        accuracy_list.append(args.mfcc['winlen'])
+        try:
+            for model in model_list:
+                args.model_name = '%s50nf_50nc_%.2fwl_%.2fws_.m'%(model, 
+                                                                  args.mfcc['winlen'], 
+                                                                  args.mfcc['winstep'])
+                
+                # Train the model
+                runner = Mid_runner_eval_timeVar(args)
+                accuracy = runner.run()
+                accuracy_list.append(accuracy)
+            # store result
+            accuracy_list = np.array(accuracy_list).reshape(1,-1)
+            accuracy_pd = pd.DataFrame(accuracy_list)
+
+            accuracy_pd.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=False, index=False, mode='a')
+            time_end = time.time()
+            print('Time comsuming now: %f s'%(time_end-time_start))
+        except FileNotFoundError:
+            print('missing file:', args.pkl_fileName)
+            continue
         
     # accuracy_pd_all.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=True, index=True)
 
@@ -98,7 +106,7 @@ if __name__ == '__main__':
     
     args.pkl_use = True
     
-    with open(os.path.join(top_path, 'config/config_timeVar.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/1_timeVar/config_timeVar.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
     

@@ -43,9 +43,9 @@ def main(args, config):
     #                               '_d9_','_d10_','_d11_','_d12_','_d13_','_d14_','_d15_','_d16_',
     #                               '_d17_','_d18_','_d19_','_d20_','_d21_','_d22_','_d23_','_d24_']
     # The background type used in training
-    args.bg_type = ['_d1_', '_d4_', '_d5_', '_d8_', '_d10_', '_d12_', '_d15_', '_d23_']
+    args.bg_type = ['_d7_', '_d10_', '_d12_', '_d14_', '_d18_', '_d19_', '_d20_', '_d23_']
     # The drone type used as attack drone in evaluation
-    args.attack_type = ['_d2_', '_d9_', '_d11_', '_d13_', '_d16_', '_d18_', '_d22_', '_d24_']
+    args.attack_type = ['_d2_', '_d3_', '_d5_', '_d8_', '_d11_', '_d15_', '_d16_', '_d24_']
     
     # The drone type used in evaluation
     args.dic_choose["drone_No"] = list(set(name_set_drone["drone_No"]).difference(set(args.bg_type)))
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     
     args.pkl_use = True
     
-    with open(os.path.join(top_path, 'config/config_attack.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/5_attack/config_attack.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
     

@@ -6,7 +6,7 @@ Created on Sat Jul 23 17:56:40 2022
 """
 
 
-def model_name(args):
+def model_name(args, suffix=''):
     if args.qda:
         model_name = '_QDA_'
     elif args.lda:
@@ -26,11 +26,12 @@ def model_name(args):
     else:
         model_name = None
     # Change a little for using different number of features
-    name_output = '%s%inf_%inc_%.2fwl_%.2fws_attack'%(model_name,
+    name_output = '%s%inf_%inc_%.2fwl_%.2fws_%s'%(model_name,
                                                 args.mfcc['num_filter'],
                                                 args.mfcc['num_cep'],
                                                 args.mfcc['winlen'],
-                                                args.mfcc['winstep'])
+                                                args.mfcc['winstep'],
+                                                suffix)
 
     name_output = name_output + '.m'
     return name_output

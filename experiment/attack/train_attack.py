@@ -57,7 +57,7 @@ def main(args, config):
     # Iterate on all methods
     for j in range(8):
         train_tool.mutual_exclusive(args, j)
-        args.output_name = train_tool.model_name(args)
+        args.output_name = train_tool.model_name(args, 'attack')
 
         runner = Mid_runner_train(args)
         runner.run()
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     args.model_save = True
     args.pkl_use = True
     
-    with open(os.path.join(top_path, 'config/config_attack.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/5_attack/config_attack.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
     

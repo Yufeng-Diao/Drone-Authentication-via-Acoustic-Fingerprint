@@ -36,8 +36,6 @@ def main(args, config):
     # The Path of pkl file
     args.pkl_savePath = config['pkl_savePath']
     
-    snr = -5.25
-    
     # Predefine the key of the dic
     args.dic_choose = dict([(k,[]) for k in name_set_list])
     args.dic_aban = dict([(k,[]) for k in name_set_list])
@@ -46,16 +44,18 @@ def main(args, config):
                               '_20220327_', '_20220328_', '_20220329_', '_20220330_', '_20220331_', 
                               '_20220401_', '_20220402_', '_20220403_', '_20220404_', '_20220405_']
     
-    args.dic_choose["drone_No"] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_']
+    args.dic_choose['drone_No'] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_',
+                              '_d9_','_d10_','_d11_','_d12_','_d13_','_d14_','_d15_','_d16_',
+                              '_d17_','_d18_','_d19_','_d20_','_d21_','_d22_','_d23_','_d24_']
     
-    model_list = ['_QDA_', '_LDA_', 'LSVM', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
+    model_list = ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
     
     # accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
     
     time_start = time.time()
     for _ in range(1):
         accuracy_list = []
-        snr = snr + 0.25
+
         args.pkl_fileName ='_%inf_%inc_1.00wl_0.50ws_8000lim.pkl'%(args.mfcc['num_filter'], 
                                                                    args.mfcc['num_filter'],
                                                                    )
@@ -63,23 +63,10 @@ def main(args, config):
             args.model_name = '%s%inf_%inc_1.00wl_0.50ws_.m'%(model, 
                                                               args.mfcc['num_filter'], 
                                                               args.mfcc['num_cep'])
-            
+            print(args.model_name)
             # Train the model
-            runner = Mid_runner_eval_timeVar(args)
-            accuracy = runner.run()
-            accuracy_list.append(accuracy)
-        # store result
-        # Generate the new dataframe and transpose it. The shape should be like (1,7)
-        accuracy_pd = pd.DataFrame({str(args.mfcc['winlen']):accuracy_list}).T
-        # Change the name of the columns. 
-        accuracy_pd.columns = model_list
-        # Add this new row to the summary table
-        # accuracy_pd_all = pd.concat([accuracy_pd_all,accuracy_pd])
-        accuracy_pd.to_csv(args.csv_savePath+'/'+'noiseVar.csv', header=False, index=False, mode='a')
-        time_end = time.time()
-        print('Time comsuming now: %f s'%(time_end-time_start))
-        
-    # accuracy_pd_all.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=True, index=True)
+            runner = Mid_runner_eval(args)
+            runner.run()
 
 
 if __name__ == '__main__':
@@ -95,7 +82,7 @@ if __name__ == '__main__':
     
     args.pkl_use = True
 
-    with open(os.path.join(top_path, 'config/config_noNoise.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/4_noiseVar/config_noNoise.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
         

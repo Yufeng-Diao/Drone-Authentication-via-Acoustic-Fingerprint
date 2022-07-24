@@ -25,7 +25,7 @@ from toolbox.name_set import name_set_list
 from toolbox import audio_processing as ap
 from toolbox import pkl_gen_tool as pgt
 
-with open(os.path.join(top_path, 'config/config_attack_gen.yml'),'r') as f:
+with open(os.path.join(top_path, 'config/5_attack/config_attack_gen.yml'),'r') as f:
     content = f.read()
     config = yaml.load(content, Loader=yaml.SafeLoader)
 
@@ -34,7 +34,7 @@ mfcc_setting = config['mfcc_setting']
 # Path to find stored data
 originData_path = config['originData_path']
 # Path to save csv
-pkl_savePath = config['pkl_fileName']
+pkl_savePath = config['pkl_savePath']
 
 dic_choose = dict([(k,[]) for k in name_set_list])
 dic_aban = dict([(k,[]) for k in name_set_list])

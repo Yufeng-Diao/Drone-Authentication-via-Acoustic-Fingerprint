@@ -25,7 +25,7 @@ from toolbox.name_set import name_set_list
 from toolbox import audio_processing as ap
 from toolbox import pkl_gen_tool as pgt
 
-with open(os.path.join(top_path, 'config/config_filterVar_gen.yml'),'r') as f:
+with open(os.path.join(top_path, 'config/3_filterVar_noise/config_filterVar_noise_gen.yml'),'r') as f:
     content = f.read()
     config = yaml.load(content, Loader=yaml.SafeLoader)
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # mfcc_setting['num_filter'] = 21
     # mfcc_setting['num_cep'] = 21
     time_start = time.time()
-    for _ in range(50):
+    for _ in range(2):
         mfcc_setting['num_filter'] = mfcc_setting['num_filter'] + 5
         mfcc_setting['num_cep'] = mfcc_setting['num_filter']
         

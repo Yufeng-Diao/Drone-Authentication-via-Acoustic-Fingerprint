@@ -87,7 +87,7 @@ if __name__ == '__main__':
     args.model_save = True
     args.pkl_use = True
     
-    with open(os.path.join(top_path, 'config/config_filterVar_1_all.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/2_filterVar/config_filterVar_3_twoThirds.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
     

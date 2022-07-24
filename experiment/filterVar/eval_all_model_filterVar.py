@@ -47,6 +47,13 @@ def main(args, config):
     
     model_list = ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
     
+    # Create the header of csv file
+    accuracy_list = model_list.copy()
+    accuracy_list.insert(0,'')
+    accuracy_list = np.array(accuracy_list).reshape(1,-1)
+    accuracy_pd = pd.DataFrame(accuracy_list)
+    accuracy_pd.to_csv(args.csv_savePath+'/'+'filterVar.csv', header=False, index=False, mode='a')
+    
     # accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
     
     args.mfcc['num_filter'] = 21
@@ -57,26 +64,27 @@ def main(args, config):
         args.mfcc['num_cep'] = int(args.mfcc['num_filter']/3*args.mfcc['portion'])
         args.pkl_fileName ='_%inf_%inc_1.00wl_0.50ws_8000lim.pkl'%(args.mfcc['num_filter'], 
                                                                    args.mfcc['num_filter'])
-        for model in model_list:
-            args.model_name = '%s%inf_%inc_1.00wl_0.50ws_.m'%(model, 
-                                                              args.mfcc['num_filter'], 
-                                                              args.mfcc['num_cep'])
-            
-            # Train the model
-            runner = Mid_runner_eval_timeVar(args)
-            accuracy = runner.run()
-            accuracy_list.append(accuracy)
-        # store result
-        # Generate the new dataframe and transpose it. The shape should be like (1,6)
-        accuracy_pd = pd.DataFrame({str(args.mfcc['winlen']):accuracy_list}).T
-        # Change the name of the columns. 
-        accuracy_pd.columns = model_list
-        # Add this new row to the summary table
-        # accuracy_pd_all = pd.concat([accuracy_pd_all,accuracy_pd])
-        accuracy_pd.to_csv(args.csv_savePath+'/'+'filterVar.csv', header=False, index=False, mode='a')
-        time_end = time.time()
-        print('Time comsuming now: %f s'%(time_end-time_start))
-        
+        accuracy_list.append(args.mfcc['num_filter'])
+        try:
+            for model in model_list:
+                args.model_name = '%s%inf_%inc_1.00wl_0.50ws_.m'%(model, 
+                                                                  args.mfcc['num_filter'], 
+                                                                  args.mfcc['num_cep'])
+                
+                # Train the model
+                runner = Mid_runner_eval_timeVar(args)
+                accuracy = runner.run()
+                accuracy_list.append(accuracy)
+            # store result
+            accuracy_list = np.array(accuracy_list).reshape(1,-1)
+            accuracy_pd = pd.DataFrame(accuracy_list)
+    
+            accuracy_pd.to_csv(args.csv_savePath+'/'+'filterVar.csv', header=False, index=False, mode='a')
+            time_end = time.time()
+            print('Time comsuming now: %f s'%(time_end-time_start))
+        except FileNotFoundError:
+            print('missing file:', args.pkl_fileName)
+            continue
     # accuracy_pd_all.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=True, index=True)
 
 
@@ -93,7 +101,7 @@ if __name__ == '__main__':
     
     args.pkl_use = True
 
-    with open(os.path.join(top_path, 'config/config_filterVar_1_all.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/2_filterVar/config_filterVar_3_twoThirds.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
 

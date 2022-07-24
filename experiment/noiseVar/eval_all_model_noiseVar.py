@@ -36,7 +36,7 @@ def main(args, config):
     # The Path of pkl file
     args.pkl_savePath = config['pkl_savePath']
     
-    snr = 12.00
+    snr = -8.25
     
     # Predefine the key of the dic
     args.dic_choose = dict([(k,[]) for k in name_set_list])
@@ -53,37 +53,44 @@ def main(args, config):
     # args.dic_choose["drone_No"] = ['_d1_','_d2_','_d3_','_d4_','_d5_','_d6_','_d7_','_d8_']
     
     model_list = ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_']
-    # model_list = ['_LSVM_']
+    # Create the header of csv file
+    accuracy_list = model_list.copy()
+    accuracy_list.insert(0,'')
+    accuracy_list = np.array(accuracy_list).reshape(1,-1)
+    accuracy_pd = pd.DataFrame(accuracy_list)
+    accuracy_pd.to_csv(args.csv_savePath+'/'+'noiseVar.csv', header=False, index=False, mode='a')
+    
     
     # accuracy_pd_all = pd.DataFrame(columns =  ['_QDA_', '_LDA_', '_LSVM_', '_SVM_', '_KNN_', '_DT_', '_RF_', '_GNB_'])
     
     time_start = time.time()
-    for _ in range(12):
+    for _ in range(93):
         accuracy_list = []
         snr = snr + 0.25
         args.pkl_fileName ='_%inf_%inc_1.00wl_0.50ws_8000lim_%.2fdB.pkl'%(args.mfcc['num_filter'], 
                                                                    args.mfcc['num_filter'],
                                                                    snr)
-        for model in model_list:
-            args.model_name = '%s%inf_%inc_1.00wl_0.50ws_.m'%(model, 
-                                                              args.mfcc['num_filter'], 
-                                                              args.mfcc['num_cep'])
+        accuracy_list.append(snr)
+        try:
+            for model in model_list:
+                args.model_name = '%s%inf_%inc_1.00wl_0.50ws_.m'%(model, 
+                                                                  args.mfcc['num_filter'], 
+                                                                  args.mfcc['num_cep'])
+                
+                # Train the model
+                runner = Mid_runner_eval_timeVar(args)
+                accuracy = runner.run()
+                accuracy_list.append(accuracy)
+            # store result
+            accuracy_list = np.array(accuracy_list).reshape(1,-1)
+            accuracy_pd = pd.DataFrame(accuracy_list)
             
-            # Train the model
-            runner = Mid_runner_eval_timeVar(args)
-            accuracy = runner.run()
-            accuracy_list.append(accuracy)
-        # store result
-        # Generate the new dataframe and transpose it. The shape should be like (1,7)
-        accuracy_pd = pd.DataFrame({str(args.mfcc['winlen']):accuracy_list}).T
-        # Change the name of the columns. 
-        accuracy_pd.columns = model_list
-        # Add this new row to the summary table
-        # accuracy_pd_all = pd.concat([accuracy_pd_all,accuracy_pd])
-        accuracy_pd.to_csv(args.csv_savePath+'/'+'noiseVar.csv', header=False, index=False, mode='a')
-        time_end = time.time()
-        print('Time comsuming now: %f s'%(time_end-time_start))
-        
+            accuracy_pd.to_csv(args.csv_savePath+'/'+'noiseVar.csv', header=False, index=False, mode='a')
+            time_end = time.time()
+            print('Time comsuming now: %f s'%(time_end-time_start))
+        except FileNotFoundError:
+            print('missing file:', args.pkl_fileName)
+            continue
     # accuracy_pd_all.to_csv(args.csv_savePath+'/'+'timeVar.csv', header=True, index=True)
 
 
@@ -100,7 +107,7 @@ if __name__ == '__main__':
     
     args.pkl_use = True
 
-    with open(os.path.join(top_path, 'config/config_noNoise.yml'),'r') as f:
+    with open(os.path.join(top_path, 'config/4_noiseVar/config_noiseVar.yml'),'r') as f:
         content = f.read()
         config = yaml.load(content, Loader=yaml.SafeLoader)
         

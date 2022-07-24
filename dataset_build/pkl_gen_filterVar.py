@@ -26,7 +26,7 @@ from toolbox.name_set import name_set_list
 from toolbox import audio_processing as ap
 from toolbox import pkl_gen_tool as pgt
 
-with open(os.path.join(top_path, 'config/config_filterVar_gen.yml'),'r') as f:
+with open(os.path.join(top_path, 'config/2_filterVar/config_filterVar_gen.yml'),'r') as f:
     content = f.read()
     config = yaml.load(content, Loader=yaml.SafeLoader)
 
