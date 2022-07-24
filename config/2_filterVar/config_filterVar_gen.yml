@@ -1,0 +1,14 @@
+originData_path: E:/1_Research/3_UAV_2/2_data/2_new_data
+output_path: 
+csv_savePath: 
+pkl_savePath: ../pkl_dataset/2_filterVar
+pkl_fileName:
+mfcc_setting:
+    num_filter: 21
+    num_cep: 21
+    winlen: 1
+    winstep: 0.5
+    fs: 44100
+    mfcc_d1_switch: True
+    mfcc_d2_switch: True
+    highfreq_limit: 8000

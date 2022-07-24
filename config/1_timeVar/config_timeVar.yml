@@ -1,0 +1,14 @@
+originData_path: E:/1_Research/3_UAV_2/2_data/2_new_data
+output_path: ../../trained_model/1_timeVar
+csv_savePath: ../../results/1_timeVar
+pkl_savePath: ../../pkl_dataset/1_timeVar
+pkl_fileName: 
+mfcc_setting:
+    num_filter: 50
+    num_cep: 50
+    winlen: 
+    winstep: 
+    fs: 44100
+    mfcc_d1_switch: False
+    mfcc_d2_switch: False
+    highfreq_limit: 8000
