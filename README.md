@@ -51,18 +51,39 @@ There are 9 config files for training different models.
    - Default csv storage path is `./result/2_filterVar/8d_x_xxxx`.
 
 # Filter-varying Experiment with AWGN
-## Training and Evaluation
+## Evaluation
 1. Run `./dataset_build/pkl_gen_filterVar_noise.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1N**.
 2. Change the name of config file in line 107 of `.\experiment\filterVar\eval_all_model_filterVar_noise.py` to evaluate different models.
 3. Run `.\experiment\filterVar\eval_all_model_filterVar_noise.py`.
    - Default csv storage path is `./result/3_filterVar_noise/8d_x_xxxx`.
 
 # Authentication of 24 drones without AWGN
+This experiment are conducted on **DS2**.
 ## Training and Evaluation
 1. Run `./experiment/noiseVar/train_all_model_noNoise.py`.
    - Default model storage path is `./trained_model/4_noiseVar/noNoise`.
 2. Run `./experiment/noiseVar/eval_all_model_noNoise.py`.
    - The results will be shown in the console.
+
+# Authentication of 24 drones with AWGN
+This experiment are conducted on **DS2N**.
+## Evaluation
+1. Run `./experiment/noiseVar/eval_all_model_noiseVar.py`.
+   - Default csv storage path is `./result/4_noiseVar`.
+
+# Security Study (Attack)
+1. Run `./dataset_build/pkl_gen_base.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2**.
+2. Run `./experiment/attack/train_attack.py`.
+3. Record `dic_reg`, `dic_attack`, `dic_bg` shown in console.
+   - For example
+   
+4. Change the value of `args.bg_type` and `args.attack_type` in `./experiment/attack/evaluate_attack.py` to `dic_bg` and `dic_attack`, respectively.
+   - For example
+   
+5. Run `./experiment/attack/evaluate_attack.py`.
+   - The results will be shown in console.
+
+
 
 
 
