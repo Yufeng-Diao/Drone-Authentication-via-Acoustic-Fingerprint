@@ -76,14 +76,11 @@ This experiment are conducted on **DS2N**.
 2. Run `./experiment/attack/train_attack.py`.
 3. Record `dic_reg`, `dic_attack`, `dic_bg` shown in console.
    - For example
-   
+   ![This is an image](./attack_example_1.png)
 4. Change the value of `args.bg_type` and `args.attack_type` in `./experiment/attack/evaluate_attack.py` to `dic_bg` and `dic_attack`, respectively.
    - For example
-   
+   ![This is an image](./attack_example_2.png)
 5. Run `./experiment/attack/evaluate_attack.py`.
    - The results will be shown in console.
-
-
-
-
+   
 
