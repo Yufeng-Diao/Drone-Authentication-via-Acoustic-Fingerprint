@@ -1,5 +1,7 @@
 # Drone Authentication via Acoustic Fingerprint
 - [x] Basic tutorial about this project.
+- [ ] Platform specification.
+- [ ] Package requirements.
 - [ ] Link of drone audio.
 
 The dataset will be released soon.
