@@ -49,8 +49,13 @@ def main(args, config):
         for i in range(len(files)):
             
             args.pkl_fileName = files[i]
-            args.mfcc['winlen'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}wl_', files[i]).group()).group())
-            args.mfcc['winstep'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}ws_', files[i]).group()).group())
+            try:
+                args.mfcc['winlen'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}wl_', files[i]).group()).group())
+                args.mfcc['winstep'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}ws_', files[i]).group()).group())
+            except AttributeError:
+                print('Abandon this file:', files[i])
+                continue
+            
             for j in range(8):
                 train_tool.mutual_exclusive(args, j)
                 args.output_name = train_tool.model_name(args)

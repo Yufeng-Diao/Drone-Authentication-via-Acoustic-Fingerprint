@@ -46,10 +46,14 @@ def main(args, config):
         for i in range(len(files)):
             
             args.pkl_fileName = files[i]
-            # Number of using filters
-            args.mfcc['num_filter'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}nf_', files[i]).group()).group())
-            # Number of using features on each dimension
-            args.mfcc['num_cep'] = int(args.mfcc['num_filter']/3*args.mfcc['portion'])
+            try:
+                # Number of using filters
+                args.mfcc['num_filter'] = float(re.search('\d+\.?\d*',re.search('_.{1,4}nf_', files[i]).group()).group())
+                # Number of using features on each dimension
+                args.mfcc['num_cep'] = int(args.mfcc['num_filter']/3*args.mfcc['portion'])
+            except AttributeError:
+                print('Abandon this file:', files[i])
+                continue
             # Iterate on all methods
             for j in range(8):
                 train_tool.mutual_exclusive(args, j)
