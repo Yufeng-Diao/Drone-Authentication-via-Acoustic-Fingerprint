@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # mfcc_setting['num_filter'] = 21
     # mfcc_setting['num_cep'] = 21
     time_start = time.time()
-    for _ in range(2):
+    for _ in range(50):
         mfcc_setting['num_filter'] = mfcc_setting['num_filter'] + 5
         mfcc_setting['num_cep'] = mfcc_setting['num_filter']
         
