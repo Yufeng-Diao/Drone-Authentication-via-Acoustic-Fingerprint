@@ -57,10 +57,11 @@ There are 9 config files for training different models.
    - Default csv storage path is `./result/2_filterVar/8d_x_xxxx`.
 
 # Filter-varying Experiment with AWGN
-## Evaluation
+## PKL Generation
 1. Run `./dataset_build/pkl_gen_filterVar_noise.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1N**.
-2. Change the name of config file in line 107 of `./experiment/filterVar/eval_all_model_filterVar_noise.py` to evaluate different models.
-3. Run `./experiment/filterVar/eval_all_model_filterVar_noise.py`.
+## Evaluation
+1. Change the name of config file in line 107 of `./experiment/filterVar/eval_all_model_filterVar_noise.py` to evaluate different models.
+2. Run `./experiment/filterVar/eval_all_model_filterVar_noise.py`.
    - Default csv storage path is `./result/3_filterVar_noise/8d_x_xxxx`.
 
 # Authentication of 24 drones without AWGN
