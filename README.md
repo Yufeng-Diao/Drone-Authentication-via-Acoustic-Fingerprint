@@ -2,7 +2,7 @@
 - [x] Basic tutorial about this project.
 - [ ] Platform specification.
 - [ ] Package requirements.
-- [ ] Link of drone audio.
+- [ ] Link of drone audio dataset.
 
 The dataset will be released soon.
 
@@ -46,20 +46,21 @@ There are 9 config files for training different models.
 - `config_filterVar_3_oneThird`
 - `config_filterVar_3_twoThirds`
 - `config_filterVar_3_all`
-## Training and Evaluation
+## PKL Generation
 1. Run `./dataset_build/pkl_gen_filterVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1**.
-2. Change the name of config file in line 90 of `.\experiment\filterVar\train_all_model_filterVar.py` to train different models.
-3. Change the name of config file in line 104 of `.\experiment\filterVar\eval_all_model_filterVar.py` to evaluate different models.
-4. Run `.\experiment\filterVar\train_all_model_filterVar.py`.
+## Training and Evaluation
+1. Change the name of config file in line 90 of `./experiment/filterVar/train_all_model_filterVar.py` to train different models.
+2. Change the name of config file in line 104 of `./experiment/filterVar/eval_all_model_filterVar.py` to evaluate different models.
+3. Run `./experiment/filterVar/train_all_model_filterVar.py`.
    - Default model storage path is `./trained_model/2_filterVar/8d_x_xxxx`.
-5. Run `.\experiment\filterVar\eval_all_model_filterVar.py`.
+4. Run `./experiment/filterVar/eval_all_model_filterVar.py`.
    - Default csv storage path is `./result/2_filterVar/8d_x_xxxx`.
 
 # Filter-varying Experiment with AWGN
 ## Evaluation
 1. Run `./dataset_build/pkl_gen_filterVar_noise.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1N**.
-2. Change the name of config file in line 107 of `.\experiment\filterVar\eval_all_model_filterVar_noise.py` to evaluate different models.
-3. Run `.\experiment\filterVar\eval_all_model_filterVar_noise.py`.
+2. Change the name of config file in line 107 of `./experiment/filterVar/eval_all_model_filterVar_noise.py` to evaluate different models.
+3. Run `./experiment/filterVar/eval_all_model_filterVar_noise.py`.
    - Default csv storage path is `./result/3_filterVar_noise/8d_x_xxxx`.
 
 # Authentication of 24 drones without AWGN
@@ -72,6 +73,8 @@ This experiment are conducted on **DS2**.
 
 # Authentication of 24 drones with AWGN
 This experiment are conducted on **DS2N**.
+## PKL Generation
+1. Run `./dataset_build/pkl_gen_noiseVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2**.
 ## Evaluation
 1. Run `./experiment/noiseVar/eval_all_model_noiseVar.py`.
    - Default csv storage path is `./result/4_noiseVar`.
