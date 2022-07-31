@@ -6,16 +6,10 @@
 
 The dataset will be released soon.
 
-# requirements
-- matplotlib==3.5.0
-- numpy==1.21.2
-- pandas==1.3.5
-- python==3.8.12
-- seaborn==0.11.2
-- wave==0.0.2
-- yaml==0.2.5
-- scikit-learn==1.0.2
-- scipy==1.7.3
+# Requirements
+Please install Anaconda at first.
+
+Then create a new environment: `conda env create -f environment.yml` 
 
 You need about 80G of storage space to generate the PKL dataset and models.
 
