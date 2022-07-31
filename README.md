@@ -1,13 +1,15 @@
 # Drone Authentication via Acoustic Fingerprint
 - [x] Basic tutorial about this project.
-- [ ] Platform specification.
+- [x] Platform specification.
 - [x] Package requirements.
 - [ ] Link of drone audio dataset.
 
 The dataset will be released soon.
 
 # Requirements
-Please install Anaconda at first.
+The platform is Window 10. (Ubuntu should be fine.)
+
+Please install Anaconda at first. If you do not have Anaconda, please see the following [link](https://www.anaconda.com/products/distribution#Downloads).
 
 Then create a new environment: `conda env create -f environment.yml` 
 
