@@ -7,7 +7,7 @@
 The dataset will be released soon.
 
 # Requirements
-The platform is Window 10. (Ubuntu should be fine.)
+The platform is Window 10. (Ubuntu 20.04 may be fine.)
 
 Please install Anaconda at first. If you do not have Anaconda, please see the following [link](https://www.anaconda.com/products/distribution#Downloads).
 
