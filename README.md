@@ -75,7 +75,7 @@ This experiment are conducted on **DS2**.
 # Authentication of 24 drones with AWGN
 This experiment are conducted on **DS2N**.
 ## PKL Generation
-1. Run `./dataset_build/pkl_gen_noiseVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2**.
+1. Run `./dataset_build/pkl_gen_noiseVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2N**.
 ## Evaluation
 1. Run `./experiment/noiseVar/eval_all_model_noiseVar.py`.
    - Default csv storage path is `./result/4_noiseVar`.
