@@ -1,10 +1,29 @@
 # Drone Authentication via Acoustic Fingerprint
 - [x] Basic tutorial about this project.
 - [ ] Platform specification.
-- [ ] Package requirements.
+- [x] Package requirements.
 - [ ] Link of drone audio dataset.
 
 The dataset will be released soon.
+
+# requirements
+- matplotlib=3.5.0
+- numpy=1.21.2
+- pandas=1.3.5
+- python=3.8.12
+- seaborn=0.11.2
+- wave=0.0.2
+- yaml=0.2.5
+- scikit-learn=1.0.2
+- scipy=1.7.3
+
+You need about 80G of storage space to generate the PKL dataset and models.
+
+# Audio Dataset Explanation
+- **DS1:** this dataset contained drone audio from No. 1 - No. 8.
+- **DS:** this dataset contained drone audio from No. 1 - No. 24.
+- **DS1N:** we added AWGN to ** DS1** with 0 dB SNR to create **DS1N**. The lengths of the corresponding drone audio in **DS1N** and **DS1** are equal to each other.
+- **DS2N:** we added AWGN to **DS2** with 93 levels of \ac{snr} ranging from -8.00 dB to 15.00 dB with a step of 0.25 dB to create **DS2N**. The size of **DS2N** is 93 times larger than the size of **DS2**. In other words, each level of SNR creates a new subset in **DS2N**, whose size is equal to **DS2**.
 
 # Folder Description
 ## dataset_build
