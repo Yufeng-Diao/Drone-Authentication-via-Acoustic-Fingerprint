@@ -4,7 +4,7 @@
 - [x] Package requirements.
 - [ ] Link of drone audio dataset.
 
-The dataset will be released soon.
+The drone audio dataset will be released after the paper is accepted.
 
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
