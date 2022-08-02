@@ -30,9 +30,9 @@ The code of all experiments, which are mentioned in the paper.
 These files help with the training and evaluation process.
 ## toolbox
 Some modules can be used in different programs.
-## Detailed instruction will be completed ASAP
 
-# Explain of Config file
+
+# Explaination of Config file
 - `originData_path`: The root of all drone audio.
 - `output_path`: Where to output/obtain the model.
 - `csv_savePath`: Where to save the evaluation results.
