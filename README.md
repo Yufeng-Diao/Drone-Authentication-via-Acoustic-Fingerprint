@@ -5,7 +5,7 @@
 - [x] Link of drone audio dataset.
 
 # Dataset
-[Drone_Audio]([https://www.anaconda.com/products/distribution#Downloads](https://gla-my.sharepoint.com/:u:/g/personal/y_diao_1_research_gla_ac_uk/Ed9ugoDrMDtBiBUn3mvs55gBtYBKRkFz_o93BjYSLFrxZg?e=s3diCf)) (temporary).
+[Drone_Audio](https://gla-my.sharepoint.com/:u:/g/personal/y_diao_1_research_gla_ac_uk/Ed9ugoDrMDtBiBUn3mvs55gBtYBKRkFz_o93BjYSLFrxZg?e=s3diCf) (temporary).
 
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
