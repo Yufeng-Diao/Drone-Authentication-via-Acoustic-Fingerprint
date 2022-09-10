@@ -2,7 +2,7 @@
 - [x] Basic tutorial about this project.
 - [x] Platform specification.
 - [x] Package requirements.
-- [ ] Link of drone audio dataset.
+- [x] Link of drone audio dataset.
 
 # Dataset
 [Drone_Audio](https://www.anaconda.com/products/distribution#Downloads) (temporary).
