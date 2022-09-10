@@ -4,7 +4,8 @@
 - [x] Package requirements.
 - [ ] Link of drone audio dataset.
 
-The drone audio dataset will be released after the paper is accepted.
+# Dataset
+[Drone_Audio](https://www.anaconda.com/products/distribution#Downloads) (temporary).
 
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
