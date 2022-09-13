@@ -4,6 +4,8 @@
 - [x] Package requirements.
 - [x] Link of drone audio dataset.
 
+The public GitHub link will be released in the final submission of our paper. For the artifacts evaluation, we provide this GitFront link.
+
 # Dataset
 [Drone_Audio](https://gla-my.sharepoint.com/:u:/g/personal/y_diao_1_research_gla_ac_uk/Ed9ugoDrMDtBiBUn3mvs55gBtYBKRkFz_o93BjYSLFrxZg?e=s3diCf) (temporary).
 
