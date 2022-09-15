@@ -9,6 +9,8 @@ The public GitHub link will be released in the final submission of our paper. Fo
 # Dataset
 [Drone_Audio](https://gla-my.sharepoint.com/:u:/g/personal/y_diao_1_research_gla_ac_uk/Ed9ugoDrMDtBiBUn3mvs55gBtYBKRkFz_o93BjYSLFrxZg?e=s3diCf) (temporary).
 
+[DOI](http://dx.doi.org/10.5525/gla.researchdata.1348) of the drone audio recordings. This link will be activated in the final submission. The content is the same as the temporary link above.
+
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
 
