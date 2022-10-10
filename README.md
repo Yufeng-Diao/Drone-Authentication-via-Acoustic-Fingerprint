@@ -19,7 +19,7 @@ The platform is Window 10. (Ubuntu 20.04 may be fine.)
 
 Please install Anaconda at first. If you do not have Anaconda, please see the following [link](https://www.anaconda.com/products/distribution#Downloads).
 
-Then create a new environment: `conda env create -f environment.yml` 
+Then create a new environment: `conda env create -f environment.yml` , the Python version should be **3.8**.
 
 You need about 80G of storage space to generate the PKL dataset and trained models.
 
@@ -30,14 +30,11 @@ You need about 80G of storage space to generate the PKL dataset and trained mode
 - **DS2N:** we added AWGN to **DS2** with 93 levels of SNR ranging from -8.00 dB to 15.00 dB with a step of 0.25 dB to create **DS2N**. The size of **DS2N** is 93 times larger than the size of **DS2**. In other words, each level of SNR creates a new subset in **DS2N**, whose size is equal to **DS2**.
 
 # Folder Description
-## dataset_build
-Build MFCC dataset based on collected drone audio. The format of the generated dataset is ".pkl".
-## experiment
-The code of all experiments, which are mentioned in the paper.
-## runners
-These files help with the training and evaluation process.
-## toolbox
-Some modules can be used in different programs.
+- **dataset_build:** Build MFCC dataset based on collected drone audio. The format of the generated dataset is ".pkl".
+- **experiment:** The code of all experiments, which are mentioned in the paper. 
+- **runners:** These files help with the training and evaluation process.
+- **toolbox:** Some modules can be used in different programs.
+
 
 
 # Explaination of Config files
