@@ -11,8 +11,10 @@ The following content/function will be added：
 
 This repository contains the code for the paper [Drone Authentication via Acoustic Fingerprint]().
 
+
 # Dataset
 Please download the dataset through the following link: [dataset](http://dx.doi.org/10.5525/gla.researchdata.1348).
+
 
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
@@ -23,11 +25,14 @@ Then create a new environment: `conda env create -f environment.yml` , the Pytho
 
 You need about 80G of storage space to generate the PKL dataset and trained models.
 
+
 # Audio Dataset Explanation
+Please check our paper for more details.
 - **DS1:** this dataset contained drone audio from No. 1 - No. 8.
 - **DS2:** this dataset contained drone audio from No. 1 - No. 24.
 - **DS1N:** we added AWGN to **DS1** with 0 dB SNR to create **DS1N**. The lengths of the corresponding drone audio in **DS1N** and **DS1** are equal to each other.
 - **DS2N:** we added AWGN to **DS2** with 93 levels of SNR ranging from -8.00 dB to 15.00 dB with a step of 0.25 dB to create **DS2N**. The size of **DS2N** is 93 times larger than the size of **DS2**. In other words, each level of SNR creates a new subset in **DS2N**, whose size is equal to **DS2**.
+
 
 # Folder Description
 - **dataset_build:** Build MFCC dataset based on collected drone audio. The format of the generated dataset is ".pkl".
@@ -36,15 +41,16 @@ You need about 80G of storage space to generate the PKL dataset and trained mode
 - **toolbox:** Some modules can be used in different programs.
 
 
-
 # Explaination of Config files
 - `originData_path`: The root of all drone audio.
 - `output_path`: Where to output/obtain the model.
 - `csv_savePath`: Where to save the evaluation results.
 - `pkl_savePath`: Where to save the dataset of extracted MFCC features.
 
+
 # At the Beginning
 Download the drone audio dataset, then change all `originData_path` in all config files to the root of download drone audio.
+
 
 # Experiment of Frame Length Change
 1. Run `./dataset_build/pkl_gen_timeVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1**.
@@ -53,6 +59,7 @@ Download the drone audio dataset, then change all `originData_path` in all confi
    - Default model storage path is `./trained_model/1_timeVar`.
 3. Run `./experiment/timeVar/eval_all_model.py` to obtain the accuracy of each model on test set.
    - Default csv storage path is `./result/1_timeVar`.
+
 
 # Filter-varying Experiment
 ## Overview
@@ -76,6 +83,7 @@ There are 9 config files for training different models.
 4. Run `./experiment/filterVar/eval_all_model_filterVar.py`.
    - Default csv storage path is `./result/2_filterVar/8d_x_xxxx`.
 
+
 # Filter-varying Experiment with AWGN
 ## PKL Generation
 1. Run `./dataset_build/pkl_gen_filterVar_noise.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1N**.
@@ -83,6 +91,7 @@ There are 9 config files for training different models.
 1. Change the name of config file in line 107 of `./experiment/filterVar/eval_all_model_filterVar_noise.py` to evaluate different models.
 2. Run `./experiment/filterVar/eval_all_model_filterVar_noise.py`.
    - Default csv storage path is `./result/3_filterVar_noise/8d_x_xxxx`.
+
 
 # Authentication of 24 drones without AWGN
 This experiment are conducted on **DS2**.
@@ -92,6 +101,7 @@ This experiment are conducted on **DS2**.
 2. Run `./experiment/noiseVar/eval_all_model_noNoise.py`.
    - The results will be shown in the console.
 
+
 # Authentication of 24 drones with AWGN
 This experiment are conducted on **DS2N**.
 ## PKL Generation
@@ -99,6 +109,7 @@ This experiment are conducted on **DS2N**.
 ## Evaluation
 1. Run `./experiment/noiseVar/eval_all_model_noiseVar.py`.
    - Default csv storage path is `./result/4_noiseVar`.
+
 
 # Security Study (Attack)
 1. Run `./dataset_build/pkl_gen_base.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2**.
@@ -112,8 +123,10 @@ This experiment are conducted on **DS2N**.
 5. Run `./experiment/attack/evaluate_attack.py`.
    - The results will be shown in console.
 
+
 # License
 All code within this repository is under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 
 # Acknowledgements
 Our code integrated and modified the following repository:
