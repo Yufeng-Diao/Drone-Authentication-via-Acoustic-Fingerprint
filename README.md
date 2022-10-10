@@ -9,7 +9,7 @@ The following content/function will be added：
 - [ ] Add a progress bar in training for indication.
 - [ ] Use command line arguments to control the training and evaluation process.
 
-This repository contains the code for the paper [Drone Authentication via Acoustic Fingerprint]().
+This repository contains the code for the paper [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653).
 
 
 # Dataset
