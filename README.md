@@ -1,15 +1,18 @@
 # Drone Authentication via Acoustic Fingerprint
+The following content/function will be added：
 - [x] Basic tutorial about this project.
 - [x] Platform specification.
 - [x] Package requirements.
 - [x] Link of drone audio dataset.
+- [ ] Add the plot function.
+- [ ] Improve the use of config files. Use relative paths and be more centralized.
+- [ ] Add a progress bar in training for indication.
+- [ ] Use command line arguments to control the training and evaluation process.
 
-The public GitHub link will be released in the final submission of our paper. For the artifacts evaluation, we provide this GitFront link.
+This repository contains the code for the paper [Drone Authentication via Acoustic Fingerprint]().
 
 # Dataset
-[Drone_Audio](https://gla-my.sharepoint.com/:u:/g/personal/y_diao_1_research_gla_ac_uk/Ed9ugoDrMDtBiBUn3mvs55gBtYBKRkFz_o93BjYSLFrxZg?e=s3diCf) (temporary).
-
-[DOI](http://dx.doi.org/10.5525/gla.researchdata.1348) of the drone audio recordings. This link will be activated in the final submission. The content is the same as the temporary link above.
+Please download the dataset through the following link: [dataset](http://dx.doi.org/10.5525/gla.researchdata.1348).
 
 # Requirements
 The platform is Window 10. (Ubuntu 20.04 may be fine.)
@@ -18,7 +21,7 @@ Please install Anaconda at first. If you do not have Anaconda, please see the fo
 
 Then create a new environment: `conda env create -f environment.yml` 
 
-You need about 80G of storage space to generate the PKL dataset and models.
+You need about 80G of storage space to generate the PKL dataset and trained models.
 
 # Audio Dataset Explanation
 - **DS1:** this dataset contained drone audio from No. 1 - No. 8.
@@ -37,7 +40,7 @@ These files help with the training and evaluation process.
 Some modules can be used in different programs.
 
 
-# Explaination of Config file
+# Explaination of Config files
 - `originData_path`: The root of all drone audio.
 - `output_path`: Where to output/obtain the model.
 - `csv_savePath`: Where to save the evaluation results.
@@ -111,5 +114,10 @@ This experiment are conducted on **DS2N**.
    ![This is an image](./attack_example_2.png)
 5. Run `./experiment/attack/evaluate_attack.py`.
    - The results will be shown in console.
-   
 
+# License
+All code within this repository is under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+# Acknowledgements
+Our code integrated and modified the following repository:
+- [python_speech_features](https://github.com/jameslyons/python_speech_features)
