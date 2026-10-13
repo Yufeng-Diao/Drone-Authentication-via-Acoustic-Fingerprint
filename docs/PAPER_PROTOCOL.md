@@ -19,6 +19,7 @@ references use public revision `88d0098b189b8cb48da3ec05ab81f7890b36d6b5`.
 | --- | --- |
 | [protocol.json](../config/paper/protocol.json) | Six experiment presets, feature contract, split, noise, metrics, and classifier migration constraints |
 | [recordings.json](../config/paper/recordings.json) | Portable filenames, SHA-256 hashes, sample counts, identity labels, distance pairs, and historical date membership |
+| [identities.json](../config/paper/identities.json) | P3 adds the Table 1 body/propeller relation, joined by identity without changing the frozen recording manifest |
 | [validation_subset.json](../config/paper/validation_subset.json) | Fixed validation subset bound to the recording manifest's hash |
 | [attack_partitions.json](../config/paper/attack_partitions.json) | All ten Table 3 partitions; do not resample them |
 | [table1_durations.json](../config/paper/table1_durations.json) | Printed Table 1 values and comparison tolerance |

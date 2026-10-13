@@ -1,5 +1,10 @@
 # Corrected numerical workflow (P2)
 
+P3 retains these numerical definitions while changing data access and storage.
+For current cache behavior, verification and atomic completion, read the
+[data pipeline guide](DATA_PIPELINE.md). The P2 baseline section below describes
+the archived pre-optimization implementation.
+
 The maintained entry point is `drone-auth`. Ubuntu 24.04, CPython 3.14.8 and
 3.13.16, and the existing `uv.lock` are the acceptance targets. The historical
 `runners/`, `experiment/`, and PKL/CSV generation scripts remain reference code;
@@ -99,8 +104,9 @@ measurement repeatable. Global NumPy random state is unaffected.
 ## Completed-task reuse and model loading
 
 Repeat the same `run` command with `--resume` to reuse a matching complete task.
-The runner verifies task identity, model/prediction/snapshot hashes and the raw
-WAVs before returning; it does not fit again or rewrite artifacts. Settings,
+The runner verifies task identity and model/prediction/snapshot hashes, then
+validates raw WAVs through the P3 recording index (or fresh hashes with
+`--verify-inputs`) before returning; it does not fit again or rewrite artifacts. Settings,
 partition, source or runtime changes require a new directory. Incomplete and
 corrupt runs fail, and are not silently resumed. No directory is overwritten.
 The full task ID includes evaluation noise; the same clean trained model may

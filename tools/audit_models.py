@@ -25,6 +25,9 @@ def audit():
         old_defaults = historical["constructors"][type(estimator).__name__]
         expected = dict(old_defaults, **explicit[name])
         decisions = []
+        if name in ("RF", "KNN"):
+            expected["n_jobs"] = 1
+            decisions.append("P3 bounds internal model parallelism to one worker.")
         if name == "RF":
             expected["max_features"] = "sqrt"
             decisions.append("Historical classifier auto maps to sqrt.")

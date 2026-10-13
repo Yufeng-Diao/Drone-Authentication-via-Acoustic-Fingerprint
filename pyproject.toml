@@ -16,6 +16,7 @@ dependencies = [
   "scikit-learn>=1.9.1,<2",
   "matplotlib>=3.11.2,<4",
   "joblib>=1.6.0,<2",
+  "threadpoolctl>=3.6.0,<4",
 ]
 
 [project.scripts]

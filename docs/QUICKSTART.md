@@ -3,7 +3,8 @@
 The maintained CLI provides segment-local MFCC/delta features, reproducible AWGN,
 closed/open-set evaluation and checked completion reuse. See the [numerical
 validation guide](NUMERICAL_VALIDATION.md) for P2 options and scientific changes.
-Full sweeps, shared caches and complete paper plots remain later phases. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
+P3 adds [indexed reads and shared binary caches](DATA_PIPELINE.md). Full sweeps
+and complete paper plots remain later phases. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
 scientific specification. Python 3.8 and the old Conda environment are unnecessary.
 
 The tested primary interpreter is CPython **3.14.8**, with **3.13.16** as the
@@ -95,10 +96,12 @@ study and use a fresh output directory. Optional `blocks`, `portion`, and
 | `model.joblib` | The model trained by this run; load only trusted artifacts in the recorded environment |
 | `failure.json` | Written after an execution failure; a failed run has no successful `result.json` |
 
-No intermediate audio or feature files are generated. One recording's samples
-are held at a time; compact feature rows accumulate in memory. P1 reads a selected
-WAV for checksum verification and again for decoding. Read reduction and cache
-reuse are P3 work and have not been measured here.
+No intermediate audio files are generated. P3 reads bounded audio/frame batches
+and stores shared binary feature arrays in an external cache. The default is
+`feature-cache` beside the run output; override it with `--cache-root`. Unchanged
+indexed WAVs use filesystem-signature validation; `--verify-inputs` forces fresh
+checksums. See [the cache guide](DATA_PIPELINE.md) for the verification policy,
+cache layout, interrupted-write recovery and resource comparison.
 
 The terminal prints each recording and the current stage. Operations lasting
 more than 10 seconds emit elapsed-time and process-CPU heartbeats. There is no

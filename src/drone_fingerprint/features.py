@@ -1,9 +1,11 @@
 """Segment-local MFCCs, true derivatives, coefficient selection and final L2."""
 
+import math
 import numpy as np
 from sklearn.preprocessing import normalize
 
 from toolbox.mfcc_base import mfcc, delta
+from toolbox.mfcc_sigproc import round_half_up
 from .config import Settings
 
 
@@ -45,13 +47,59 @@ def extract_base(samples: np.ndarray, settings: Settings) -> np.ndarray:
     """
     if samples.ndim != 1 or not samples.size or not np.isfinite(samples).all():
         raise ValueError("Expected a nonempty, finite, one-dimensional audio segment")
+    return _base_mfcc(samples.astype(np.float64, copy=False), settings, 0.97)
+
+
+def _base_mfcc(samples, settings, preemphasis):
     frame_s = settings.frame_ms / 1000
-    return mfcc(samples.astype(np.float64, copy=False), samplerate=44100, winlen=frame_s, winstep=frame_s / 2,
+    return mfcc(samples, samplerate=44100, winlen=frame_s, winstep=frame_s / 2,
                 numcep=settings.n_filters, nfilt=settings.n_filters, lowfreq=0,
-                highfreq=8000, preemph=0.97, ceplifter=22, appendEnergy=True,
+                highfreq=8000, preemph=preemphasis, ceplifter=22, appendEnergy=True,
                 winfunc=np.hamming)
 
 
 def extract_segment(samples: np.ndarray, settings: Settings) -> np.ndarray:
     """Return float64 (frames, selected columns) features; never join segments here."""
     return select_features(extract_base(samples, settings), settings)
+
+
+def frame_geometry(samples: int, settings: Settings) -> tuple[int, int, int]:
+    """Return frame length, hop and padded frame count using the P2 convention."""
+    frame_s = settings.frame_ms / 1000
+    length = round_half_up(frame_s * 44100)
+    hop = round_half_up(frame_s / 2 * 44100)
+    count = 1 if samples <= length else 1 + math.ceil((samples - length) / hop)
+    return length, hop, count
+
+
+def iter_base_frames(reader, start: int, end: int, settings: Settings, batch_frames: int = 32):
+    """Yield raw (batch frames, filters) matrices without resetting pre-emphasis.
+
+    Reader.read uses absolute sample intervals. Only the final frame of the
+    continuous segment is padded; overlap and one preceding sample are reread.
+    """
+    if type(batch_frames) is not int or batch_frames < 1:
+        raise ValueError('batch_frames must be a positive integer')
+    length, hop, count = frame_geometry(end - start, settings)
+    for first in range(0, count, batch_frames):
+        frames = min(batch_frames, count - first)
+        offset = start + first * hop
+        stop = min(end, offset + (frames - 1) * hop + length)
+        previous = offset > start
+        samples = reader.read(offset - int(previous), stop)
+        emphasized = np.r_[samples[0], samples[1:] - 0.97 * samples[:-1]]
+        if previous:
+            emphasized = emphasized[1:]
+        base = _base_mfcc(emphasized, settings, 0)
+        if base.shape != (frames, settings.n_filters) or not np.isfinite(base).all():
+            raise ValueError('Bounded extraction returned invalid MFCC frames')
+        yield base
+
+
+def iter_selected_frames(base, settings: Settings, batch_frames: int = 256):
+    """Apply derivatives with a two-frame halo, then select and normalize rows."""
+    for start in range(0, len(base), batch_frames):
+        end = min(len(base), start + batch_frames)
+        left, right = max(0, start - 2), min(len(base), end + 2)
+        selected = select_features(base[left:right], settings)
+        yield selected[start - left:end - left]

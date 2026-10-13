@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source": "Paper Section 3 and Table 1, printed page 661",
+  "meaning": "Join to recordings.json by identity. Identity is a body/propeller combination, not an independently purchased drone. Room noise has null identity; classifier background label 0 is a separate concept.",
+  "identities": [
+    {"identity": 1, "body": "A", "propeller_set": "a1-a4"},
+    {"identity": 2, "body": "B", "propeller_set": "b1-b4"},
+    {"identity": 3, "body": "C", "propeller_set": "c1-c4"},
+    {"identity": 4, "body": "D", "propeller_set": "d1-d4"},
+    {"identity": 5, "body": "E", "propeller_set": "e1-e4"},
+    {"identity": 6, "body": "F", "propeller_set": "f1-f4"},
+    {"identity": 7, "body": "G", "propeller_set": "g1-g4"},
+    {"identity": 8, "body": "H", "propeller_set": "h1-h4"},
+    {"identity": 9, "body": "A", "propeller_set": "x1-x4"},
+    {"identity": 10, "body": "B", "propeller_set": "x1-x4"},
+    {"identity": 11, "body": "C", "propeller_set": "x1-x4"},
+    {"identity": 12, "body": "D", "propeller_set": "x1-x4"},
+    {"identity": 13, "body": "E", "propeller_set": "x1-x4"},
+    {"identity": 14, "body": "F", "propeller_set": "x1-x4"},
+    {"identity": 15, "body": "G", "propeller_set": "x1-x4"},
+    {"identity": 16, "body": "H", "propeller_set": "x1-x4"},
+    {"identity": 17, "body": "A", "propeller_set": "y1-y4"},
+    {"identity": 18, "body": "B", "propeller_set": "y1-y4"},
+    {"identity": 19, "body": "C", "propeller_set": "y1-y4"},
+    {"identity": 20, "body": "D", "propeller_set": "y1-y4"},
+    {"identity": 21, "body": "E", "propeller_set": "y1-y4"},
+    {"identity": 22, "body": "F", "propeller_set": "y1-y4"},
+    {"identity": 23, "body": "G", "propeller_set": "y1-y4"},
+    {"identity": 24, "body": "H", "propeller_set": "y1-y4"}
+  ]
+}

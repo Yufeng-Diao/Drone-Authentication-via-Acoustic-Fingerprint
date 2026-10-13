@@ -29,3 +29,10 @@ are part of the run record and are not suppressed to make a run appear healthy.
 This constructor audit does not establish numerical equivalence of old and new
 sklearn implementations. P1 fits GNB on a small two-identity closed-set example;
 P4 validates all eight model fits, and P6 evaluates the full paper protocol.
+
+## P3 execution limits
+
+P3 sets RF and KNN `n_jobs=1` and limits BLAS/OpenMP work to one thread during
+preparation, fitting and evaluation. This is a deliberate resource-policy change
+from RF's historical `n_jobs=-1`; the constructor audit records it explicitly.
+Seeds, model formulas, splitting and SVM iteration limits are unchanged.

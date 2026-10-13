@@ -20,12 +20,12 @@ def make_model(name: str, seed: int = 2022):
         return SVC(C=1, kernel="rbf", gamma="auto", decision_function_shape="ovo", max_iter=1000,
                    probability=False, random_state=seed)
     if name == "KNN":
-        return KNeighborsClassifier(n_neighbors=8)
+        return KNeighborsClassifier(n_neighbors=8, n_jobs=1)
     if name == "DT":
         return DecisionTreeClassifier(max_depth=20, min_samples_leaf=15, min_samples_split=15, random_state=1)
     if name == "RF":
         return RandomForestClassifier(max_depth=15, min_samples_leaf=10, min_samples_split=10,
-                                      max_features="sqrt", n_jobs=-1, random_state=seed)
+                                      max_features="sqrt", n_jobs=1, random_state=seed)
     if name == "GNB":
         return GaussianNB()
     raise ValueError(f"Unknown model: {name}")

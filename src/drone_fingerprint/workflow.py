@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from dataclasses import asdict
 from datetime import datetime, timezone
 import importlib.metadata
-import json
 from pathlib import Path
 import platform
 import sys
@@ -15,25 +14,16 @@ import warnings
 import joblib
 import numpy as np
 from sklearn.metrics import confusion_matrix
+from threadpoolctl import threadpool_limits
 
 from .config import Settings
-from .data import read_recording, sha256, labelled_intervals
-from .features import extract_segment, feature_metadata
-from .noise import add_noise
+from .data import sha256
+from .features import feature_metadata
 from .metrics import classification_metrics, open_set_metrics
 from .artifacts import task_identity, completed_result
 from .models import make_model
-
-
-def create_output(path: Path, audio_root: Path | None = None) -> Path:
-    """Create a fresh external run directory; never overwrite an existing run."""
-    path = path.resolve()
-    if any((parent / ".git").exists() or (parent / "pyproject.toml").exists() for parent in (path, *path.parents)):
-        raise ValueError("Output must be outside every Git checkout or Python source project")
-    if audio_root is not None and path.is_relative_to(audio_root.resolve()):
-        raise ValueError("Output must not be inside the input audio directory")
-    path.mkdir(parents=True, exist_ok=False)
-    return path
+from .pipeline import prepare_features, cache_lock, recording_index
+from .storage import create_output, external_path, atomic_json
 
 
 def environment() -> dict:
@@ -68,20 +58,25 @@ def timed_phase(name: str, timings: dict, interval_s: float = 10):
         print(f"{name}: {status}; elapsed={elapsed:.3f}s", flush=True)
 
 
+@threadpool_limits.wrap(limits=1)
 def run_experiment(records: list[dict], audio_root: Path, settings: Settings,
-                   output: Path, provenance: dict, *, resume: bool = False, save_features: bool = False) -> dict:
+                   output: Path, provenance: dict, *, resume: bool = False, save_features: bool = False,
+                   cache_root: Path | None = None, verify_inputs: bool = False, batch_frames: int = 32) -> dict:
     """Run one closed/open-set task with clean training and optional noisy testing.
 
-    Audio is read per recording; feature rows accumulate in memory. Optional
-    feature snapshots preserve the corrected P2 baseline for P3 comparisons.
+    Bounded audio/frame batches populate shared float64 feature caches. Estimators
+    consume read-only mmaps; individual estimators may still allocate copies.
     """
+    cache_root = external_path(cache_root or output.parent / 'feature-cache', audio_root)
+    if output.resolve().is_relative_to(cache_root) or cache_root.is_relative_to(output.resolve()):
+        raise ValueError('Cache and run output directories must be separate')
     runtime = environment()
     task_id = task_identity(records, settings, provenance, runtime, save_features)
     if resume and output.exists():
         result = completed_result(output, task_id)
         # Check raw inputs too: a stale manifest alone must not authorize reuse.
-        for record in records:
-            read_recording(audio_root, record)
+        with cache_lock(cache_root, audio_root) as root:
+            recording_index(records, audio_root, root, verify_inputs)
         print(f"Reused completed task {task_id}; no fitting or artifact writes", flush=True)
         return result
     output = create_output(output, audio_root)
@@ -90,34 +85,12 @@ def run_experiment(records: list[dict], audio_root: Path, settings: Settings,
     try:
         if settings.partition is not None and sum(r["identity"] is None for r in records) != 1:
             raise ValueError("Open-set training requires exactly one declared room-noise interval")
-        features, labels = {"train": [], "test": []}, {"train": [], "test": []}
-        segment_index, noise_records, original_test_identity = [], [], []
-        result_labels = list(settings.identities) if settings.partition is None else [0] + settings.partition["registered"]
-        for index, record in enumerate(records, 1):
-            print(f"Recording {index}/{len(records)}: {record['path']}", flush=True)
-            with timed_phase("loading", timings):
-                samples = read_recording(audio_root, record)
-            intervals = labelled_intervals(record, settings.partition)
-            noisy = None
-            if settings.test_snr_quarter_db is not None and any(i[0] == "test" for i in intervals):
-                with timed_phase("noise", timings):
-                    noisy, info = add_noise(samples, record["sha256"], settings.seed, settings.test_snr_quarter_db)
-                    noise_records.append({"recording": record["path"], **info})
-            with timed_phase("extraction", timings):
-                for split, start, end, label in intervals:
-                    signal = noisy if split == "test" and noisy is not None else samples
-                    block = extract_segment(signal[start:end], settings)
-                    features[split].append(block)
-                    labels[split].append(np.full(len(block), label, dtype=np.int64))
-                    if split == "test":
-                        original_test_identity.append(np.full(len(block), record["identity"], dtype=np.int64))
-                    segment_index.append({"recording": record["path"], "identity": record["identity"],
-                                          "classifier_label": label, "split": split, "start_sample": start,
-                                          "end_sample": end, "feature_rows": len(block)})
-            del samples, noisy, signal
-        x_train, x_test = (np.concatenate(features[s]) for s in ("train", "test"))
-        y_train, y_test = (np.concatenate(labels[s]) for s in ("train", "test"))
-        original_identity = np.concatenate(original_test_identity)
+        result_labels = list(settings.identities) if settings.partition is None else [0] + settings.partition['registered']
+        with timed_phase('feature preparation', timings):
+            arrays, labels, original_identity, segment_index, noise_records, cache_stats = prepare_features(
+                records, audio_root, settings, cache_root, verify_inputs=verify_inputs, batch_frames=batch_frames)
+        x_train, x_test = arrays['train'], arrays['test']
+        y_train, y_test = labels['train'], labels['test']
         if set(y_train) != set(result_labels) or set(y_test) != set(result_labels):
             raise ValueError("Train/test labels do not cover the declared classes")
         model = make_model(settings.model, settings.seed)
@@ -145,6 +118,7 @@ def run_experiment(records: list[dict], audio_root: Path, settings: Settings,
         result = {"schema_version": 2, "status": "passed", "task_id": task_id,
                   "scope": "Corrected validation workflow; not full paper reproduction",
                   "feature_metadata": feature_metadata(settings), "noise": noise_records,
+                  "cache": {"root": str(cache_root), **cache_stats}, "thread_limit": 1,
                   "started_at": started, "finished_at": datetime.now(timezone.utc).isoformat(),
                   "configuration": asdict(settings), "provenance": provenance, "environment": runtime,
                   "model_parameters": model.get_params(deep=False), "warnings": captured_warnings,
@@ -155,11 +129,11 @@ def run_experiment(records: list[dict], audio_root: Path, settings: Settings,
                   "segments": segment_index,
                   "artifacts": {name: {"bytes": (output / name).stat().st_size, "sha256": sha256(output / name)}
                                 for name in (["model.joblib", "predictions.npz"] + (["features.npz"] if save_features else []))}}
-        (output / "result.json").write_text(json.dumps(result, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+        atomic_json(output / "result.json", result)
         print(f"Completed: {output / 'result.json'}; smoke accuracy={metrics['accuracy']:.4f}", flush=True)
         return result
     except Exception as error:
         failure = {"status": "failed", "task_id": task_id, "started_at": started, "error": str(error), "timings_s": timings,
                    "configuration": asdict(settings), "provenance": provenance, "warnings": captured_warnings}
-        (output / "failure.json").write_text(json.dumps(failure, indent=2) + "\n", encoding="utf-8")
+        atomic_json(output / "failure.json", failure)
         raise

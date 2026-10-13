@@ -10,8 +10,8 @@ and scientific decisions. The [model migration audit](docs/MODEL_MIGRATION.md)
 explains estimator defaults. The CLI supports one closed/open-set task, corrected
 segment-local deltas, fractional coefficient selection and reproducible test AWGN.
 Read the [numerical validation guide](docs/NUMERICAL_VALIDATION.md) before comparing
-these corrected conventions with historical results. Full sweeps, shared caches
-and paper figures remain later phases. Validation results are not full paper
+these corrected conventions with historical results. P3 provides [bounded audio reads and shared NumPy caches](docs/DATA_PIPELINE.md).
+Full sweeps and paper figures remain later phases. Validation results are not full paper
 reproduction results. Ubuntu 24.04 is the current platform target; remote CI has
 not yet been run. Windows and macOS are outside the current scope.
 

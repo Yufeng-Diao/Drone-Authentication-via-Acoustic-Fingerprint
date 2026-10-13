@@ -85,6 +85,7 @@ dependencies = [
     { name = "numpy" },
     { name = "scikit-learn" },
     { name = "scipy" },
+    { name = "threadpoolctl" },
 ]
 
 [package.dev-dependencies]
@@ -99,6 +100,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.4,<3" },
     { name = "scikit-learn", specifier = ">=1.9.1,<2" },
     { name = "scipy", specifier = ">=1.18.1,<2" },
+    { name = "threadpoolctl", specifier = ">=3.6.0,<4" },
 ]
 
 [package.metadata.requires-dev]
