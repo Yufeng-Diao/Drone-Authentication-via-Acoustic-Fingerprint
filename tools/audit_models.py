@@ -22,9 +22,11 @@ def audit():
     rows = []
     for name in MODELS:
         estimator = make_model(name)
-        old_defaults = historical["constructors"][type(estimator).__name__]
+        old_defaults = historical["constructors"]["QuadraticDiscriminantAnalysis" if name == "QDA" else type(estimator).__name__]
         expected = dict(old_defaults, **explicit[name])
         decisions = []
+        if name == "QDA":
+            decisions.append("P4 PaperQDA retains historical n-1 SVD scaling and warning-only rank checks; no added regularization.")
         if name in ("RF", "KNN"):
             expected["n_jobs"] = 1
             decisions.append("P3 bounds internal model parallelism to one worker.")
@@ -48,7 +50,7 @@ def audit():
         rows.append({"model": name, "status": "passed", "changed_library_defaults": changed_defaults,
                      "new_parameters": additions.get(name, {}), "decisions": decisions, "effective_parameters": actual})
     return {"status": "passed", "historical_version": "1.0.2", "installed_version": sklearn.__version__,
-            "scope": "Constructor/default audit only; eight-model fitting belongs to P4", "models": rows,
+            "scope": "Constructor/default audit only; fit acceptance is recorded separately in P4", "models": rows,
             "historical_sources": historical["source_urls"]}
 
 

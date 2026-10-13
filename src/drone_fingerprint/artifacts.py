@@ -33,8 +33,18 @@ def completed_result(output: Path, task_id: str | None = None) -> dict:
             or (output / "failure.json").exists() or (task_id is not None and result.get("task_id") != task_id)):
         raise ValueError("Completed task metadata does not match this run; use a new output directory")
     names = set(result["artifacts"])
-    if not {"model.joblib", "predictions.npz"} <= names or names - {"model.joblib", "predictions.npz", "features.npz"}:
+    reference = result.get('model_reference')
+    required = {'predictions.npz'} if reference else {'model.joblib', 'predictions.npz'}
+    if not required <= names or names - {"model.joblib", "predictions.npz", "features.npz"}:
         raise ValueError("Completed result has missing or unknown artifacts")
+    if reference:
+        source = Path(reference['path'])
+        metadata = json.loads((source / 'result.json').read_text(encoding='utf-8'))
+        if metadata.get('model_reference') is not None:
+            raise ValueError('Model dependency must be a training result, not another evaluation')
+        dependency = completed_result(source, reference['task_id'])
+        if dependency['artifacts']['model.joblib']['sha256'] != reference['sha256'] or 'model.joblib' in names:
+            raise ValueError('Model dependency checksum mismatch or duplicate model artifact')
     for name, metadata in result["artifacts"].items():
         path = output / name
         if path.is_symlink() or path.stat().st_size != metadata["bytes"] or sha256(path) != metadata["sha256"]:
@@ -45,6 +55,8 @@ def completed_result(output: Path, task_id: str | None = None) -> dict:
 def load_model(output: Path, settings):
     """Load only trusted joblib files; checksum validation is not a security sandbox."""
     result = completed_result(output)
+    if result.get('model_reference') is not None:
+        raise ValueError('Load the original training result instead of an evaluation')
     if result["feature_metadata"] != feature_metadata(settings):
         raise ValueError("Model feature metadata mismatch, even if selected dimensions agree")
     expected, recorded = asdict(settings), dict(result["configuration"])

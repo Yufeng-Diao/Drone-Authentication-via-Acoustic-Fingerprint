@@ -36,3 +36,30 @@ P3 sets RF and KNN `n_jobs=1` and limits BLAS/OpenMP work to one thread during
 preparation, fitting and evaluation. This is a deliberate resource-policy change
 from RF's historical `n_jobs=-1`; the constructor audit records it explicitly.
 Seeds, model formulas, splitting and SVM iteration limits are unchanged.
+
+## P4 QDA fit compatibility
+
+The first eight-model real-data run failed at QDA before producing a result.
+Constructor equality had missed two implementation changes: the installed 1.9.1
+SVD fit divides squared singular values by `n`, and rejects covariance scales
+below its rank threshold. The historical 1.0.2 fit divides by `n-1` and warns
+when the centered data's singular values are below the threshold. L2-normalized
+MFCC features exposed the new failure on the first class. The current API text
+still describes warning behavior; this decision follows the actual installed
+source and observed exception, not that description alone.
+
+`qda.py::PaperQDA` keeps the historical SVD fit explicitly, using modern input
+validation and inherited prediction methods. It adds no regularization or
+shrinkage and preserves `tol=1e-4`. Rank warnings remain visible. Exactly zero
+or nonfinite covariance scales, and nonfinite decision scores, fail instead of
+publishing arbitrary predictions. This compatibility class is limited to the
+historical SVD solver; other covariance methods are separate scientific choices.
+The adapted fit retains upstream [BSD-3-Clause attribution](../LICENSE_sklearn_QDA).
+
+Sources: [scikit-learn 1.0.2 implementation](https://github.com/scikit-learn/scikit-learn/blob/1.0.2/sklearn/discriminant_analysis.py),
+[1.9.1 implementation](https://github.com/scikit-learn/scikit-learn/blob/1.9.1/sklearn/discriminant_analysis.py),
+and [current QDA API](https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html).
+The phase evidence retains the original failure, source snapshots and a direct
+real-feature replay of the historical fit. Unit tests also compare scores to
+independently computed Gaussian densities with unbiased sample covariance.
+A future scikit-learn upgrade must rerun both constructor and numerical checks.

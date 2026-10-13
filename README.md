@@ -1,7 +1,8 @@
 # Drone Authentication via Acoustic Fingerprint
 
 The modern workflow targets Python 3.14.8, with Python 3.13.16 compatibility
-checks, and uses `uv.lock` for exact dependency versions. Start with the
+checks, and uses `uv.lock` for exact dependency versions.
+The historical QDA compatibility fit retains [scikit-learn BSD attribution](LICENSE_sklearn_QDA). Start with the
 [modern quickstart](docs/QUICKSTART.md) to install into an external environment
 and run `drone-auth synthetic` or a small public-data closed-set experiment.
 
@@ -11,7 +12,8 @@ explains estimator defaults. The CLI supports one closed/open-set task, correcte
 segment-local deltas, fractional coefficient selection and reproducible test AWGN.
 Read the [numerical validation guide](docs/NUMERICAL_VALIDATION.md) before comparing
 these corrected conventions with historical results. P3 provides [bounded audio reads and shared NumPy caches](docs/DATA_PIPELINE.md).
-Full sweeps and paper figures remain later phases. Validation results are not full paper
+P4 adds [paper presets, visible training and restartable task attempts](docs/EXPERIMENTS.md).
+Full-grid execution and paper figures remain later phases. Validation results are not full paper
 reproduction results. Ubuntu 24.04 is the current platform target; remote CI has
 not yet been run. Windows and macOS are outside the current scope.
 

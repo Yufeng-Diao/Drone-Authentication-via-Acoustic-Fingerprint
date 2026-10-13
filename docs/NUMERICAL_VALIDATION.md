@@ -37,12 +37,13 @@ and attack drone test intervals enter evaluation. Attack labels map to 0, while
 `predictions.npz` retains `original_identity` for per-identity rejection metrics.
 The validation subset explicitly uses the first 60 seconds of room noise. A
 full-protocol subset must declare `[0, noise_frame_count]`; the runner does not
-silently split or cap this recording. Full dataset preset orchestration is P4.
+silently split or cap this recording. Full dataset preset orchestration is available through the [P4 paper command](EXPERIMENTS.md).
 
 All examples are implementation validation, not paper accuracy benchmarks.
 They preserve the paper's within-recording 70/30 intervals, not recording-held-out
 generalization. The real validation currently exercises GNB fitting; all eight
-constructors are audited, while their complete fit matrix belongs to P4.
+constructors are audited, and P4 validates all eight fits on the fixed subset;
+see [model compatibility](MODEL_MIGRATION.md).
 
 ## Configuration and feature shape
 
@@ -83,7 +84,7 @@ borrowing across train/test gaps, recordings or room-noise intervals.
 | B4: segment boundaries | Extract/derive each continuous interval separately. Two different constant segments must have zero derivatives, including their boundaries. |
 | B5: normalization | Drop coefficient 0, select, concatenate, then normalize the final row. Historical PKL and direct paths normalize blocks at different times. These are scientific convention changes, not guaranteed accuracy improvements. |
 | B6: fractions | Count available coefficients after removal and use half-open slicing. Actual extraction is checked for all 36 filter/fraction/block combinations above. |
-| B7: repeated rows / unrecorded identity | One immutable directory and JSON completion marker per task, explicit seeds and resolved partition. Stable task identity binds inputs, settings, source hashes, runtime and snapshot option. Checked completed-task reuse is supported; interrupted training recovery is P4. |
+| B7: repeated rows / unrecorded identity | One immutable directory and JSON completion marker per task, explicit seeds and resolved partition. Stable task identity binds inputs, settings, source hashes, runtime and snapshot option. Checked completed-task reuse is supported; interrupted training recovery is provided by the P4 `paper --resume` command. |
 | B8: room noise | Room noise is a declared training-only interval. Background drones contribute only training intervals; attack drones contribute only test intervals. Original drone identities remain available. |
 | B9: F1 equation | Use standard per-class `2PR/(P+R)`, then macro-average with `zero_division=0`. Equation (4), printed page 663, shows its reciprocal; this does not establish that the paper's table used the wrong formula. |
 | B10: boundaries and model identity | Validate mono little-endian PCM16 at 44.1 kHz, size, checksum, frame count, paths and configuration. Errors exit nonzero. Model loading validates complete feature and training configuration, even for equal column counts. |

@@ -46,6 +46,8 @@ jobs:
         run: uv run --locked --no-editable --python ${{ matrix.python }} python -I -B tools/audit_models.py
       - name: Installed CLI and synthetic WAV workflow
         run: uv run --locked --no-editable --python ${{ matrix.python }} drone-auth synthetic --output "${{ runner.temp }}/drone-evidence/synthetic"
+      - name: Paper plan without audio or training
+        run: uv run --locked --no-editable --python ${{ matrix.python }} drone-auth paper --config config/validation/paper_smoke.json --dry-run > "${{ runner.temp }}/drone-evidence/paper-plan.log"
       - name: Upload separate test evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

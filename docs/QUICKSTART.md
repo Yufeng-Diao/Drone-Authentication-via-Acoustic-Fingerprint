@@ -81,9 +81,8 @@ recording-held-out generalization test.
 
 The JSON configuration accepts exactly the documented fields. Unknown options,
 unsupported feature settings, stale manifests and incomplete distance pairs
-fail explicitly. Change `model` to select another paper estimator, but recognize
-that the P1 real-data smoke evidence covers GNB; the eight-model fit acceptance
-belongs to P4. Change `frame_ms`, `n_filters` or `identities` for a small clean
+fail explicitly. Change `model` to select another paper estimator, and use the [paper experiment guide](EXPERIMENTS.md) for the eight-model
+validation sweep and automatic task recovery. Change `frame_ms`, `n_filters` or `identities` for a small clean
 study and use a fresh output directory. Optional `blocks`, `portion`, and
 `test_snr_quarter_db` fields are described in the numerical validation guide.
 
@@ -106,8 +105,8 @@ cache layout, interrupted-write recovery and resource comparison.
 The terminal prints each recording and the current stage. Operations lasting
 more than 10 seconds emit elapsed-time and process-CPU heartbeats. There is no
 wall-time cutoff and no invented fit percentage. SVM iteration budgets remain
-1000; warnings are printed and recorded. The P1 heartbeat test uses a silent
-operation; an actual slow estimator trace and recovery behavior remain P4 work.
+1000; warnings are printed and recorded. The `paper` command also saves separate attempt logs, records task status,
+and restarts unfinished fits with `--resume`; see [experiment recovery](EXPERIMENTS.md).
 
 Capture terminal logs outside the source tree, for example with shell redirection
 to a new file under `../refactor_evidence/`. Timing values are individual smoke

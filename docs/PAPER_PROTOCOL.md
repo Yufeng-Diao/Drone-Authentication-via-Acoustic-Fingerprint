@@ -6,8 +6,11 @@ numerical results. The legacy entry points do not consume these JSON files yet.
 P1 provides a locked modern environment; see the [quickstart](QUICKSTART.md).
 The platform target is Ubuntu. P2 implements and validates corrected numerical
 rules for individual closed/open-set tasks; see [numerical validation](NUMERICAL_VALIDATION.md).
-P4 connects the complete experiment runner to these presets. These stages do
-not establish full paper reproduction.
+P4 connects the complete experiment runner to these presets; see
+[experiment execution and recovery](EXPERIMENTS.md). The frozen JSON status text
+records the P0 snapshot, not current implementation progress. These stages do
+not establish full paper reproduction. P4 also retains the historical QDA SVD
+fit through an [explicit compatibility implementation](MODEL_MIGRATION.md#p4-qda-fit-compatibility).
 
 The scientific reference is [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653),
 ACSAC 2022. Printed page numbers below refer to that paper. Historical implementation
@@ -21,6 +24,8 @@ references use public revision `88d0098b189b8cb48da3ec05ab81f7890b36d6b5`.
 | [recordings.json](../config/paper/recordings.json) | Portable filenames, SHA-256 hashes, sample counts, identity labels, distance pairs, and historical date membership |
 | [identities.json](../config/paper/identities.json) | P3 adds the Table 1 body/propeller relation, joined by identity without changing the frozen recording manifest |
 | [validation_subset.json](../config/paper/validation_subset.json) | Fixed validation subset bound to the recording manifest's hash |
+| [full_subset.json](../config/paper/full_subset.json) | P4 full selection: 240 drone recordings and the entire room-noise interval |
+| [full_sweep.json](../config/paper/full_sweep.json) | Executable complete paper plan; use `--dry-run` before starting a full sweep |
 | [attack_partitions.json](../config/paper/attack_partitions.json) | All ten Table 3 partitions; do not resample them |
 | [table1_durations.json](../config/paper/table1_durations.json) | Printed Table 1 values and comparison tolerance |
 | [validate_p0.py](../tools/validate_p0.py) | Standard-library checks for the specification and downloaded WAV files |

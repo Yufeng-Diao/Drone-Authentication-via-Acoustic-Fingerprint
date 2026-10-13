@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol": "../paper/protocol.json",
+  "recordings_manifest": "../paper/recordings.json",
+  "subset_manifest": "../paper/full_subset.json",
+  "partitions_manifest": "../paper/attack_partitions.json",
+  "presets": {
+    "figure2": {},
+    "figure3": {},
+    "figure4": {},
+    "table2": {},
+    "figure5": {},
+    "tables4_5": {}
+  },
+  "models": [
+    "QDA",
+    "LDA",
+    "LSVM",
+    "RBF-SVM",
+    "KNN",
+    "DT",
+    "RF",
+    "GNB"
+  ]
+}

@@ -9,7 +9,7 @@ description = "Reproducible acoustic drone authentication research"
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 license = "Apache-2.0"
-license-files = ["LICENSE", "toolbox/LICENSE_python_speech_features"]
+license-files = ["LICENSE", "LICENSE_sklearn_QDA", "toolbox/LICENSE_python_speech_features"]
 dependencies = [
   "numpy>=2.5.4,<3",
   "scipy>=1.18.1,<2",
@@ -28,7 +28,7 @@ dev = ["pytest>=9.1.1,<10"]
 [tool.uv]
 required-version = "==0.13.0"
 # Rebuild local wheels after source edits, not just dependency metadata changes.
-cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.py" }, { file = "toolbox/**/*.py" }, { file = "README.md" }, { file = "LICENSE" }, { file = "toolbox/LICENSE_python_speech_features" }]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.py" }, { file = "toolbox/**/*.py" }, { file = "README.md" }, { file = "LICENSE" }, { file = "LICENSE_sklearn_QDA" }, { file = "toolbox/LICENSE_python_speech_features" }]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/drone_fingerprint", "toolbox"]

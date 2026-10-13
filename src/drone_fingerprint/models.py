@@ -1,17 +1,19 @@
 """The eight paper estimators, with documented migration choices."""
 
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC, SVC
 from sklearn.tree import DecisionTreeClassifier
 
+from .qda import PaperQDA
+
 
 def make_model(name: str, seed: int = 2022):
     """Construct an estimator; retain historical budgets and LSVM's dual solver."""
     if name == "QDA":
-        return QuadraticDiscriminantAnalysis()
+        return PaperQDA()
     if name == "LDA":
         return LinearDiscriminantAnalysis()
     if name == "LSVM":

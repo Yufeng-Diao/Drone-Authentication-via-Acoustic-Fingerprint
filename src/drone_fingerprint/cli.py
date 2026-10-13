@@ -27,6 +27,16 @@ def main() -> int:
     index.add_argument('--manifest', type=Path, required=True)
     index.add_argument('--audio-root', type=Path, required=True)
     index.add_argument('--cache-root', type=Path, required=True)
+    paper = commands.add_parser('paper', help='Plan or run selected paper grids with checked restart')
+    paper.add_argument('--config', type=Path, required=True)
+    paper.add_argument('--preset', nargs='+', help='Override the selected presets; retain configured value selectors')
+    paper.add_argument('--model', nargs='+', help='Override the selected classifiers')
+    paper.add_argument('--dry-run', action='store_true', help='Print task dependencies and array sizes without reading WAVs or fitting')
+    paper.add_argument('--audio-root', type=Path)
+    paper.add_argument('--output', type=Path)
+    paper.add_argument('--cache-root', type=Path)
+    paper.add_argument('--log-root', type=Path)
+    paper.add_argument('--resume', action='store_true', help='Validate completions and restart unfinished tasks in new attempts')
     synthetic = commands.add_parser("synthetic", help="Check installation with labelled synthetic WAV fixtures")
     synthetic.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -34,6 +44,17 @@ def main() -> int:
         print("Initializing the numerical stack; startup may take time.", flush=True)
         from .data import select_recordings, select_room_noise, sha256
         from .workflow import create_output, run_experiment
+        if args.command == 'paper':
+            from .experiments import load_plan, run_plan
+            plan = load_plan(args.config, presets=args.preset, models=args.model)
+            if args.dry_run:
+                print(json.dumps(plan, indent=2), flush=True)
+                return 0
+            if any(getattr(args, key) is None for key in ('audio_root', 'output', 'cache_root', 'log_root')):
+                raise ValueError('Paper execution requires --audio-root, --output, --cache-root and --log-root')
+            print(f"Resolved tasks: {plan['counts']}; {plan['resource_note']}", flush=True)
+            run_plan(plan, args.audio_root, args.output, args.cache_root, args.log_root, resume=args.resume)
+            return 0
         if args.command == 'index':
             from .pipeline import build_recording_index
             result = build_recording_index(json.loads(args.manifest.read_text(encoding='utf-8')), args.audio_root, args.cache_root)
@@ -59,7 +80,10 @@ def main() -> int:
                        resume=getattr(args, "resume", False), save_features=getattr(args, "save_features", False),
                        cache_root=getattr(args, "cache_root", None), verify_inputs=getattr(args, "verify_inputs", False), batch_frames=getattr(args, "batch_frames", 32))
         return 0
-    except (ValueError, TypeError, KeyError, OSError, EOFError, wave.Error) as error:
+    except KeyboardInterrupt:
+        print('Interrupted; unfinished paper tasks restart on --resume. Completed attempts are preserved.', file=sys.stderr, flush=True)
+        return 130
+    except (ValueError, TypeError, KeyError, OSError, EOFError, RuntimeError, wave.Error) as error:
         print(f"ERROR: {error}", file=sys.stderr, flush=True)
         return 1
 

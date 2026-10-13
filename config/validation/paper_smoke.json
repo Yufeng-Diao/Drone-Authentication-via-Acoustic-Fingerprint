@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "protocol": "../paper/protocol.json",
+  "recordings_manifest": "../paper/recordings.json",
+  "subset_manifest": "../paper/validation_subset.json",
+  "partitions_manifest": "../paper/attack_partitions.json",
+  "presets": {
+    "table2": {}
+  },
+  "models": [
+    "QDA",
+    "LDA",
+    "LSVM",
+    "RBF-SVM",
+    "KNN",
+    "DT",
+    "RF",
+    "GNB"
+  ]
+}

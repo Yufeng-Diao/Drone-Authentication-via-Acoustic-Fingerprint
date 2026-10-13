@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol": "../paper/protocol.json",
+  "recordings_manifest": "../paper/recordings.json",
+  "subset_manifest": "../paper/validation_subset.json",
+  "partitions_manifest": "../paper/attack_partitions.json",
+  "presets": {
+    "figure2": {
+      "frame_ms": [
+        20
+      ]
+    }
+  },
+  "models": [
+    "LSVM",
+    "RBF-SVM"
+  ]
+}
