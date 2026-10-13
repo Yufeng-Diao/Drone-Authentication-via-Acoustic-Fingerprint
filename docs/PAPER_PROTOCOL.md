@@ -3,10 +3,11 @@
 P0 establishes the data and experimental specification for **acsac2022-modern-v1**.
 It does not implement the new training pipeline or claim to reproduce the paper's
 numerical results. The legacy entry points do not consume these JSON files yet.
-P1 now provides a locked modern environment and a small base-MFCC closed-set
-workflow; see the [quickstart](QUICKSTART.md). Windows execution remains
-unverified. P2 validates numerical changes, and P4 connects the complete
-experiment runner to these presets.
+P1 provides a locked modern environment; see the [quickstart](QUICKSTART.md).
+The platform target is Ubuntu. P2 implements and validates corrected numerical
+rules for individual closed/open-set tasks; see [numerical validation](NUMERICAL_VALIDATION.md).
+P4 connects the complete experiment runner to these presets. These stages do
+not establish full paper reproduction.
 
 The scientific reference is [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653),
 ACSAC 2022. Printed page numbers below refer to that paper. Historical implementation
@@ -114,9 +115,8 @@ and was cross-checked against the published table.
 ## Validate without training
 
 Run from the repository root using Python 3.11 or newer. This standalone validator
-uses only the standard library; its interpreter is not the planned training
-environment. P1 targets a modern stable locked environment and will establish
-actual supported versions separately.
+uses only the standard library. The training environment separately targets
+CPython 3.14.8 with 3.13.16 compatibility on Ubuntu, as verified in P1/P2.
 
 ```bash
 mkdir -p ../refactor_evidence/P0/local-validation
@@ -142,4 +142,4 @@ This requires Matplotlib and the bundle's `manifest.json`,
 `measurements/protocol-validation.json`, logs and source patch. The generator
 rejects output inside the repository and detects configuration changes since
 validation. Plotting dependency versions are recorded in each run manifest;
-the P1 lockfile will make the full reporting environment reproducible.
+the committed lockfile specifies the modern reporting environment.

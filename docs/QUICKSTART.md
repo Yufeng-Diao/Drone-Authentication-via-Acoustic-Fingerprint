@@ -1,17 +1,18 @@
 # Modern installation and a small closed-set run
 
-P1 provides a real WAV-to-result workflow with base MFCCs and one classifier.
-It does not yet implement noisy sweeps, deltas, open-set evaluation, shared caches,
-or complete paper plots. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
+The maintained CLI provides segment-local MFCC/delta features, reproducible AWGN,
+closed/open-set evaluation and checked completion reuse. See the [numerical
+validation guide](NUMERICAL_VALIDATION.md) for P2 options and scientific changes.
+Full sweeps, shared caches and complete paper plots remain later phases. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
 scientific specification. Python 3.8 and the old Conda environment are unnecessary.
 
 The tested primary interpreter is CPython **3.14.8**, with **3.13.16** as the
 compatibility target. Both use ordinary GIL-enabled builds. `uv.lock` contains
 the resolved versions and distribution hashes; `.python-version` selects the
 primary interpreter. Python 3.15 and free-threaded builds are outside this range.
-Linux is tested locally. The Linux/Windows CI matrix in `.github/workflows/ci.yml`
-is provided for verification after publication; Windows is not yet a verified
-platform. macOS is also unverified.
+Ubuntu 24.04 is the supported and locally tested platform. The Ubuntu CI matrix
+in `.github/workflows/ci.yml` covers both interpreters. Windows and macOS are
+outside the current project scope; remote CI has not yet been executed.
 
 ## Install with uv
 
@@ -22,8 +23,11 @@ PATH. The project's uv version requirement rejects a different uv version.
 Run the following from the repository root. Keep data, environments, caches,
 outputs and logs in sibling directories. `uv sync --locked` must not rewrite
 the lockfile. Its default editable install is useful when changing the code.
+The configured [uv cache keys](https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata)
+also track package source and license files, so a non-editable install rebuilds
+after source edits instead of reusing a stale local wheel.
 
-Linux/macOS shell (macOS commands are documented but unverified):
+Ubuntu shell:
 
 ```bash
 export UV_PROJECT_ENVIRONMENT="$PWD/../refactor_artifacts/environments/default"
@@ -33,21 +37,6 @@ export MPLCONFIGDIR="$PWD/../refactor_artifacts/cache/matplotlib"
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONNOUSERSITE=1
 export PYTHONPATH=""
-uv sync --locked
-uv run --locked drone-auth --help
-uv run --locked drone-auth synthetic --output ../refactor_artifacts/runs/synthetic-001
-```
-
-Windows PowerShell:
-
-```powershell
-$env:UV_PROJECT_ENVIRONMENT = "$((Get-Location).Path)/../refactor_artifacts/environments/default"
-$env:UV_CACHE_DIR = "$((Get-Location).Path)/../refactor_artifacts/cache/uv"
-$env:UV_PYTHON_INSTALL_DIR = "$((Get-Location).Path)/../refactor_artifacts/environments/python"
-$env:MPLCONFIGDIR = "$((Get-Location).Path)/../refactor_artifacts/cache/matplotlib"
-$env:PYTHONDONTWRITEBYTECODE = "1"
-$env:PYTHONNOUSERSITE = "1"
-$env:PYTHONPATH = ""
 uv sync --locked
 uv run --locked drone-auth --help
 uv run --locked drone-auth synthetic --output ../refactor_artifacts/runs/synthetic-001
@@ -78,8 +67,7 @@ uv run --locked drone-auth run \
   --output ../refactor_artifacts/runs/public-smoke-001
 ```
 
-In PowerShell, put the same arguments on one line or use PowerShell's backtick
-line continuation. Manifest paths in JSON resolve relative to the config file;
+Manifest paths in JSON resolve relative to the config file;
 CLI data and output paths resolve relative to the working directory.
 
 This configuration projects the P0 fixed validation subset onto identities
@@ -95,8 +83,8 @@ unsupported feature settings, stale manifests and incomplete distance pairs
 fail explicitly. Change `model` to select another paper estimator, but recognize
 that the P1 real-data smoke evidence covers GNB; the eight-model fit acceptance
 belongs to P4. Change `frame_ms`, `n_filters` or `identities` for a small clean
-base-MFCC study and use a fresh output directory. Deltas, AWGN and partial
-coefficient selection are not accepted as silent no-op options.
+study and use a fresh output directory. Optional `blocks`, `portion`, and
+`test_snr_quarter_db` fields are described in the numerical validation guide.
 
 ## What the run writes and displays
 
@@ -142,8 +130,7 @@ python3.14 -m venv ../refactor_artifacts/environments/pip-example
 ```
 
 Use the pinned 3.14.8 interpreter for the primary installation; 3.13.16 can be
-checked separately. On Windows use `py -3.14 -m venv ...` and
-`.../Scripts/python.exe` instead of the POSIX interpreter paths. This export is
+checked separately. This export is
 generated from `uv.lock`; do not maintain a second dependency version list.
 The wheel includes the reused MFCC core and both project/third-party licenses.
 It does not include audio, models, execution logs or paper results.

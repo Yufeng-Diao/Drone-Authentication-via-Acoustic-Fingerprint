@@ -69,3 +69,45 @@ def split_intervals(frames: int) -> dict[str, list[tuple[int, int]]]:
     boundaries = [frames * p // 100 for p in (0, 20, 35, 65, 80, 100)]
     return {"train": [(boundaries[i], boundaries[i + 1]) for i in (0, 2, 4)],
             "test": [(boundaries[i], boundaries[i + 1]) for i in (1, 3)]}
+
+
+def select_room_noise(manifest_path: Path, subset_path: Path) -> dict:
+    """Select the explicitly declared training-only interval (full or subset)."""
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    subset = json.loads(subset_path.read_text(encoding="utf-8"))
+    if subset["recordings_manifest_sha256"] != sha256(manifest_path):
+        raise ValueError("Subset references a different recordings manifest")
+    matches = [r for r in manifest["recordings"] if r["path"] == subset["room_noise_recording"]]
+    if len(matches) != 1 or matches[0]["identity"] is not None:
+        raise ValueError("Expected one room-noise recording without a drone identity")
+    record = dict(matches[0])
+    interval = subset["room_noise_interval_samples"]
+    if (not isinstance(interval, list) or len(interval) != 2 or any(type(i) is not int for i in interval)
+            or not 0 <= interval[0] < interval[1] <= record["frames"]):
+        raise ValueError("Invalid room-noise training interval")
+    record["training_interval"] = interval
+    return record
+
+
+def labelled_intervals(record: dict, partition: dict | None) -> list[tuple[str, int, int, int]]:
+    """Return (split, start, end, classifier label), keeping source identity separate."""
+    identity = record["identity"]
+    if identity is None:
+        if partition is None:
+            raise ValueError("Room noise is only valid in open-set training")
+        start, end = record["training_interval"]
+        if not 0 <= start < end <= record["frames"]:
+            raise ValueError("Room-noise interval exceeds recording bounds")
+        return [("train", start, end, 0)]
+    intervals = split_intervals(record["frames"])
+    label = identity
+    if partition is not None:
+        if identity in partition["background"]:
+            intervals = {"train": intervals["train"]}
+            label = 0
+        elif identity in partition["attack"]:
+            intervals = {"test": intervals["test"]}
+            label = 0
+        elif identity not in partition["registered"]:
+            raise ValueError("Recording identity is absent from partition")
+    return [(split, start, end, label) for split, ranges in intervals.items() for start, end in ranges]

@@ -17,7 +17,7 @@ from drone_fingerprint.data import read_recording, select_recordings, sha256, sp
 from drone_fingerprint.features import extract_segment
 from drone_fingerprint.models import make_model
 from drone_fingerprint.synthetic import create_fixture
-from drone_fingerprint.workflow import create_output, run_closed_set, timed_phase
+from drone_fingerprint.workflow import create_output, run_experiment, timed_phase
 
 
 @pytest.fixture
@@ -131,15 +131,15 @@ def test_failure_never_creates_a_success_result(tmp_path, dataset):
     (manifest.parent / records[0]["path"]).unlink()
     output = tmp_path / "failed-run"
     with pytest.raises(FileNotFoundError):
-        run_closed_set(records, manifest.parent, Settings(), output, {"dataset": "synthetic"})
+        run_experiment(records, manifest.parent, Settings(), output, {"dataset": "synthetic"})
     assert not (output / "result.json").exists()
     assert json.loads((output / "failure.json").read_text())["status"] == "failed"
 
 
 def test_wav_to_model_predictions_are_repeatable(tmp_path, dataset):
     manifest, _, records = dataset
-    first = run_closed_set(records, manifest.parent, Settings(), tmp_path / "first", {"dataset": "synthetic"})
-    second = run_closed_set(records, manifest.parent, Settings(), tmp_path / "second", {"dataset": "synthetic"})
+    first = run_experiment(records, manifest.parent, Settings(), tmp_path / "first", {"dataset": "synthetic"})
+    second = run_experiment(records, manifest.parent, Settings(), tmp_path / "second", {"dataset": "synthetic"})
     assert first["training_rows"] == 100 and first["test_rows"] == 40
     assert first["feature_columns"] == 49
     assert first["metrics"]["accuracy"] >= 0.95  # Distinct synthetic tones, not a real-data target.
@@ -165,7 +165,7 @@ def test_failed_fit_preserves_its_warnings(tmp_path, dataset, monkeypatch, capsy
     manifest, _, records = dataset
     output = tmp_path / "failed-fit"
     with pytest.raises(ValueError, match="Fixture fit failure"):
-        run_closed_set(records, manifest.parent, Settings(), output, {"dataset": "synthetic"})
+        run_experiment(records, manifest.parent, Settings(), output, {"dataset": "synthetic"})
     failure = json.loads((output / "failure.json").read_text())
     assert failure["warnings"][0]["message"] == "Fixture warning before failed fit"
     assert "Fixture warning before failed fit" in capsys.readouterr().err

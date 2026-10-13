@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "recordings_manifest": "../paper/recordings.json",
+  "subset_manifest": "../paper/validation_subset.json",
+  "identities": [
+    1,
+    2
+  ],
+  "frame_ms": 1000,
+  "n_filters": 50,
+  "model": "GNB",
+  "seed": 2022,
+  "blocks": 3,
+  "portion": 2,
+  "test_snr_quarter_db": 0
+}

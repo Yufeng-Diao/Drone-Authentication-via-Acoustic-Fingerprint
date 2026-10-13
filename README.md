@@ -7,11 +7,13 @@ and run `drone-auth synthetic` or a small public-data closed-set experiment.
 
 The [paper protocol guide](docs/PAPER_PROTOCOL.md) records the dataset selection
 and scientific decisions. The [model migration audit](docs/MODEL_MIGRATION.md)
-explains estimator defaults. The current CLI supports clean base MFCCs and one
-model per run. Full sweeps, corrected delta features, cache management and paper
-figure generation are still being implemented. Smoke results are not paper
-reproduction results. Linux has been exercised locally; Windows CI is prepared
-but unverified until its jobs actually pass.
+explains estimator defaults. The CLI supports one closed/open-set task, corrected
+segment-local deltas, fractional coefficient selection and reproducible test AWGN.
+Read the [numerical validation guide](docs/NUMERICAL_VALIDATION.md) before comparing
+these corrected conventions with historical results. Full sweeps, shared caches
+and paper figures remain later phases. Validation results are not full paper
+reproduction results. Ubuntu 24.04 is the current platform target; remote CI has
+not yet been run. Windows and macOS are outside the current scope.
 
 ## Historical workflow
 

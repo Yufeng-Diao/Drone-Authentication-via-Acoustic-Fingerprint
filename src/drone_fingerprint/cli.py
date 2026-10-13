@@ -10,20 +10,22 @@ from .config import Settings, load_config
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Acoustic drone authentication: P1 closed-set workflow")
+    parser = argparse.ArgumentParser(description="Acoustic drone authentication: validated research workflow")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
-    run = commands.add_parser("run", help="Run clean base MFCCs on a declared recording subset")
+    run = commands.add_parser("run", help="Run one declared closed/open-set experiment")
     run.add_argument("--config", type=Path, required=True)
     run.add_argument("--audio-root", type=Path, required=True)
     run.add_argument("--output", type=Path, required=True, help="New directory outside every source checkout")
+    run.add_argument("--resume", action="store_true", help="Reuse only a matching, intact completed task")
+    run.add_argument("--save-features", action="store_true", help="Save a binary baseline snapshot for validation")
     synthetic = commands.add_parser("synthetic", help="Check installation with labelled synthetic WAV fixtures")
     synthetic.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
         print("Initializing the numerical stack; startup may take time.", flush=True)
-        from .data import select_recordings, sha256
-        from .workflow import create_output, run_closed_set
+        from .data import select_recordings, select_room_noise, sha256
+        from .workflow import create_output, run_experiment
         if args.command == "synthetic":
             from .synthetic import create_fixture
             output = create_output(args.output)
@@ -37,8 +39,11 @@ def main() -> int:
             provenance = {"dataset": "Explicit identity projection of the frozen validation subset",
                           "configuration_sha256": sha256(args.config)}
         records = select_recordings(manifest, subset, settings.identities)
+        if settings.partition is not None:
+            records.append(select_room_noise(manifest, subset))
         provenance.update(recordings_manifest_sha256=sha256(manifest), subset_manifest_sha256=sha256(subset))
-        run_closed_set(records, audio_root, settings, run_output, provenance)
+        run_experiment(records, audio_root, settings, run_output, provenance,
+                       resume=getattr(args, "resume", False), save_features=getattr(args, "save_features", False))
         return 0
     except (ValueError, TypeError, KeyError, OSError, EOFError, wave.Error) as error:
         print(f"ERROR: {error}", file=sys.stderr, flush=True)
