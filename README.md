@@ -58,6 +58,7 @@ multiple runs, units, panel mapping and Markdown/LaTeX exports.
 
 ## Guides for researchers
 
+- [Full experiment and release status](docs/RELEASE_STATUS.md)
 - [Live training webpage and SSH port forwarding](docs/LIVE_MONITOR.md)
 - [Experiment selection, progress and recovery](docs/EXPERIMENTS.md)
 - [Frozen paper protocol](docs/PAPER_PROTOCOL.md) and [numerical corrections](docs/NUMERICAL_VALIDATION.md)
@@ -69,8 +70,8 @@ multiple runs, units, panel mapping and Markdown/LaTeX exports.
 
 The full plan contains 4,096 fits plus 4,344 evaluations reusing clean models.
 Use `--dry-run` before selecting it. Current validation covers fixed subsets;
-full reproduction, remote CI execution and release publication remain later
-work. Results incorporate documented implementation corrections and do not
+the full corrected rerun is in progress. Full reproduction, remote CI execution
+and release publication are not yet complete. Results incorporate documented implementation corrections and do not
 promise exact agreement with historical tables. Recording-held-out or new-room
 generalization is not established by the paper's within-recording split.
 

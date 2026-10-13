@@ -85,7 +85,7 @@ class Trainer():
     
     def lsvm_train(self):
         print('Start LSVM')
-        classifier_lsvm = svm.LinearSVC(C=1,max_iter=1000) # ovo:一对一策略
+        classifier_lsvm = svm.LinearSVC(C=1,max_iter=1000) # One-versus-rest classifier.
         classifier_lsvm.fit(self.wave_feature_all,self.wave_label_all.ravel())
         print('Finish LSVM')
         return classifier_lsvm
@@ -95,7 +95,7 @@ class Trainer():
         C = 1
         classifier_svm = svm.SVC(C=C,kernel='rbf',gamma="auto",
                                  decision_function_shape='ovo', 
-                                 max_iter = 1000) # ovo:一对一策略
+                                 max_iter = 1000) # One-versus-one decision function.
         classifier_svm.fit(self.wave_feature_all,self.wave_label_all.ravel())
         print('Finish SVM')
         return classifier_svm

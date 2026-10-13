@@ -13,6 +13,7 @@ code, not the maintained CLI. No plugin framework is needed to modify a study.
 | Which estimator and parameters? | `models.py`, `qda.py` |
 | How are metrics defined? | `metrics.py` |
 | Which task grid, dependencies and recovery? | `experiments.py`, `workflow.py`, `artifacts.py` |
+| How is training observed in a browser? | `monitor.py`, `web/monitor.html`, `web/monitor.css`, `web/monitor.js` |
 | How are figures assembled? | `results.py`, `plotting.py` |
 
 Python modules above live in `src/drone_fingerprint`, except the retained MFCC
