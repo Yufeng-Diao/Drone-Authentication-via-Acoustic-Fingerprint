@@ -38,7 +38,7 @@ def completed_result(output: Path, task_id: str | None = None) -> dict:
     if not required <= names or names - {"model.joblib", "predictions.npz", "features.npz"}:
         raise ValueError("Completed result has missing or unknown artifacts")
     if reference:
-        source = Path(reference['path'])
+        source = output / reference['path']
         metadata = json.loads((source / 'result.json').read_text(encoding='utf-8'))
         if metadata.get('model_reference') is not None:
             raise ValueError('Model dependency must be a training result, not another evaluation')

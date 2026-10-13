@@ -95,7 +95,7 @@ def run_experiment(records: list[dict], audio_root: Path, settings: Settings,
                 or any(dependency['provenance'].get(k) != provenance.get(k) for k in
                        ('recordings_manifest_sha256', 'subset_manifest_sha256'))):
             raise ValueError('Clean model dependency has different data, runtime or training provenance')
-        model_reference = {'path': str(trained_from.resolve()), 'task_id': dependency['task_id'],
+        model_reference = {'path': os.path.relpath(trained_from.resolve(), output.resolve()), 'task_id': dependency['task_id'],
                            'sha256': dependency['artifacts']['model.joblib']['sha256']}
         provenance = {**provenance, 'model_dependency': {k: model_reference[k] for k in ('task_id', 'sha256')}}
     task_id = task_identity(records, settings, provenance, runtime, save_features)

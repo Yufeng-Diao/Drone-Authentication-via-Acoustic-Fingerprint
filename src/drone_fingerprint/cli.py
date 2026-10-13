@@ -37,11 +37,20 @@ def main() -> int:
     paper.add_argument('--cache-root', type=Path)
     paper.add_argument('--log-root', type=Path)
     paper.add_argument('--resume', action='store_true', help='Validate completions and restart unfinished tasks in new attempts')
+    plot = commands.add_parser('plot', help='Generate paper figures and tables from saved sweep results only')
+    plot.add_argument('--runs', nargs='+', type=Path, required=True, help='One or more sweep directories containing plan.json and sweep.json')
+    plot.add_argument('--paper-dir', type=Path, default=Path('config/paper'), help='Frozen protocol/manifest directory; default: config/paper')
+    plot.add_argument('--output', type=Path, required=True, help='New external figure gallery directory')
     synthetic = commands.add_parser("synthetic", help="Check installation with labelled synthetic WAV fixtures")
     synthetic.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
         print("Initializing the numerical stack; startup may take time.", flush=True)
+        if args.command == 'plot':
+            from .plotting import render_results
+            manifest = render_results(args.runs, args.paper_dir, args.output)
+            print(f"Gallery: {args.output / 'index.html'}; verified results={manifest['verified_results']}; {manifest['scope']}", flush=True)
+            return 0
         from .data import select_recordings, select_room_noise, sha256
         from .workflow import create_output, run_experiment
         if args.command == 'paper':

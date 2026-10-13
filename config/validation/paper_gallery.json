@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "protocol": "../paper/protocol.json",
+  "recordings_manifest": "../paper/recordings.json",
+  "subset_manifest": "../paper/validation_subset.json",
+  "partitions_manifest": "../paper/attack_partitions.json",
+  "presets": {
+    "figure2": {
+      "frame_ms": [
+        20,
+        70,
+        120
+      ]
+    },
+    "figure3": {
+      "n_filters": [
+        26,
+        31
+      ]
+    },
+    "figure4": {
+      "n_filters": [
+        26,
+        31
+      ]
+    },
+    "figure5": {
+      "snr_quarter_db": [
+        -32,
+        0,
+        60
+      ]
+    },
+    "tables4_5": {}
+  },
+  "models": [
+    "GNB"
+  ]
+}

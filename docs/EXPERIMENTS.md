@@ -57,8 +57,14 @@ Selecting Figure 4 or Figure 5 automatically includes its required clean fits,
 without duplicating a clean task already selected in the same plan. Evaluation
 results reference the original model with its task ID and checksum; they do not
 fit or write another copy of the model. Preserve the complete output directory.
-Absolute model-reference paths currently mean a moved sweep must be regenerated
-or deliberately migrated; silently searching for substitute models is unsafe.
+New evaluation results store relative model-reference paths, so the complete
+sweep can move together. Earlier P4 results retain absolute references and need
+their original paths. References are always checked; substitute models are not searched for.
+
+`paper_gallery.json` is a bounded GNB example: 32 fits and 21 evaluations,
+covering all nine Figure 3/4 panels at two adjacent filter counts, three frame
+lengths, three SNR values, Table 2 and all ten open-set trials. Render saved
+sweeps with [the plot command](FIGURES.md); it does not start experiments.
 
 The dry run reads JSON manifests only. It reports train/test row counts, selected
 columns, task dependencies and raw base-plus-selected array bytes for each task.

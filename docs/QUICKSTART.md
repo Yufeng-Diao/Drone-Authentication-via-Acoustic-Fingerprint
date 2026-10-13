@@ -3,8 +3,9 @@
 The maintained CLI provides segment-local MFCC/delta features, reproducible AWGN,
 closed/open-set evaluation and checked completion reuse. See the [numerical
 validation guide](NUMERICAL_VALIDATION.md) for P2 options and scientific changes.
-P3 adds [indexed reads and shared binary caches](DATA_PIPELINE.md). Full sweeps
-and complete paper plots remain later phases. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
+The pipeline uses [indexed reads and shared binary caches](DATA_PIPELINE.md).
+[Paper presets](EXPERIMENTS.md) and [saved-result plots](FIGURES.md) are implemented;
+full-grid execution remains release-phase work. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
 scientific specification. Python 3.8 and the old Conda environment are unnecessary.
 
 The tested primary interpreter is CPython **3.14.8**, with **3.13.16** as the

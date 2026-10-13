@@ -1,156 +1,81 @@
 # Drone Authentication via Acoustic Fingerprint
 
-The modern workflow targets Python 3.14.8, with Python 3.13.16 compatibility
-checks, and uses `uv.lock` for exact dependency versions.
-The historical QDA compatibility fit retains [scikit-learn BSD attribution](LICENSE_sklearn_QDA). Start with the
-[modern quickstart](docs/QUICKSTART.md) to install into an external environment
-and run `drone-auth synthetic` or a small public-data closed-set experiment.
+Reproducible research code for the [ACSAC 2022 paper](https://doi.org/10.1145/3564625.3564653)
+by Yufeng Diao, Yichi Zhang, Guodong Zhao and Mohamed Khamis. The maintained
+workflow runs on **Ubuntu**, with **Python 3.14.8** and **3.13.16** compatibility
+checks. Exact scientific dependencies are recorded in `uv.lock`.
 
-The [paper protocol guide](docs/PAPER_PROTOCOL.md) records the dataset selection
-and scientific decisions. The [model migration audit](docs/MODEL_MIGRATION.md)
-explains estimator defaults. The CLI supports one closed/open-set task, corrected
-segment-local deltas, fractional coefficient selection and reproducible test AWGN.
-Read the [numerical validation guide](docs/NUMERICAL_VALIDATION.md) before comparing
-these corrected conventions with historical results. P3 provides [bounded audio reads and shared NumPy caches](docs/DATA_PIPELINE.md).
-P4 adds [paper presets, visible training and restartable task attempts](docs/EXPERIMENTS.md).
-Full-grid execution and paper figures remain later phases. Validation results are not full paper
-reproduction results. Ubuntu 24.04 is the current platform target; remote CI has
-not yet been run. Windows and macOS are outside the current scope.
+The pipeline reads the original WAV files, extracts MFCC features in bounded
+batches, trains the eight paper classifiers, and generates figures and tables
+from saved results. It uses shared NumPy arrays instead of per-frame CSV/PKL
+files. Slow phases show elapsed time, CPU and memory; interrupted paper tasks
+restart in new attempts while verified completions are reused.
 
-## Historical workflow
+## Start here
 
-The instructions below and `environment.yml` describe the original release.
-They are retained for reference and are not the modern installation path.
+Install **uv 0.13.0**, clone this repository, and run these commands from its root.
+The [quickstart](docs/QUICKSTART.md) also covers standard venv/pip installation.
 
-The following content/function will be added：
-- [x] Basic tutorial about this project.
-- [x] Platform specification.
-- [x] Package requirements.
-- [x] Link of drone audio dataset.
-- [ ] Add the plot function.
-- [ ] Improve the use of config files. Use relative paths and be more centralized.
-- [ ] Add a progress bar in training for indication.
-- [ ] Use command line arguments to control the training and evaluation process.
+```bash
+export UV_PROJECT_ENVIRONMENT="$PWD/../refactor_artifacts/environments/default"
+export UV_CACHE_DIR="$PWD/../refactor_artifacts/cache/uv"
+export UV_PYTHON_INSTALL_DIR="$PWD/../refactor_artifacts/environments/python"
+export MPLCONFIGDIR="$PWD/../refactor_artifacts/cache/matplotlib"
+export PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 PYTHONPATH=""
+uv sync --locked
+uv run --locked drone-auth synthetic --output ../refactor_artifacts/runs/synthetic-001
+```
 
-This repository contains the code for the paper [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653).
+Choose fresh output names; commands preserve previous results. Keep environments,
+models, caches, figures and logs outside the source checkout. Synthetic accuracy
+checks installation only and is not a paper measurement.
 
+## Public data and paper experiments
 
-# Dataset
-Please download the dataset through the following link: [dataset](http://dx.doi.org/10.5525/gla.researchdata.1348).
+Download the [CC BY 4.0 public dataset](https://doi.org/10.5525/gla.researchdata.1348).
+The [data guide](docs/QUICKSTART.md#run-the-prepared-public-data-example) explains
+extraction and verification. The frozen manifests identify 257 WAV files; the
+paper uses 240 selected drone recordings and one room-noise recording.
 
+```bash
+uv run --locked drone-auth paper --config config/validation/paper_smoke.json --dry-run
+uv run --locked drone-auth paper \
+  --config config/validation/paper_smoke.json \
+  --audio-root ../refactor_artifacts/data/acsac2022/extracted \
+  --output ../refactor_artifacts/runs/paper-smoke-001 \
+  --cache-root ../refactor_artifacts/cache/features \
+  --log-root ../refactor_evidence/paper-smoke-001
+uv run --locked drone-auth plot \
+  --runs ../refactor_artifacts/runs/paper-smoke-001 \
+  --output ../refactor_evidence/paper-smoke-001-figures
+```
 
-# Requirements
-The platform is Window 10. (Ubuntu 20.04 may be fine.)
+Open the generated `index.html`. The gallery exports Figures 2–5, Tables 2–5,
+confusion matrices and per-identity recall diagnostics as applicable. Missing
+results are visible; subset figures are explicitly labelled incomplete previews.
+No training runs during plotting. See [figures and tables](docs/FIGURES.md) for
+multiple runs, units, panel mapping and Markdown/LaTeX exports.
 
-Please install Anaconda at first. If you do not have Anaconda, please see the following [link](https://www.anaconda.com/products/distribution#Downloads).
+## Guides for researchers
 
-Then create a new environment: `conda env create -f environment.yml` , the Python version should be **3.8**.
+- [Experiment selection, progress and recovery](docs/EXPERIMENTS.md)
+- [Frozen paper protocol](docs/PAPER_PROTOCOL.md) and [numerical corrections](docs/NUMERICAL_VALIDATION.md)
+- [Model compatibility decisions](docs/MODEL_MIGRATION.md), including the historical QDA SVD fit
+- [Data cache and resource measurements](docs/DATA_PIPELINE.md)
+- [Modify features and figures](docs/DEVELOPMENT.md), with executable examples
+- [CPU container](docs/CONTAINER.md), using the same Python and dependency lock
+- [Historical workflow reference](docs/LEGACY_WORKFLOW.md), for the original release only
 
-You need about 80G of storage space to generate the PKL dataset and trained models.
+The full plan contains 4,096 fits plus 4,344 evaluations reusing clean models.
+Use `--dry-run` before selecting it. Current validation covers fixed subsets;
+full reproduction, remote CI execution and release publication remain later
+work. Results incorporate documented implementation corrections and do not
+promise exact agreement with historical tables. Recording-held-out or new-room
+generalization is not established by the paper's within-recording split.
 
+## License
 
-# Audio Dataset Explanation
-Please check our paper for more details.
-- **DS1:** this dataset contained drone audio from No. 1 - No. 8.
-- **DS2:** this dataset contained drone audio from No. 1 - No. 24.
-- **DS1N:** we added AWGN to **DS1** with 0 dB SNR to create **DS1N**. The lengths of the corresponding drone audio in **DS1N** and **DS1** are equal to each other.
-- **DS2N:** we added AWGN to **DS2** with 93 levels of SNR ranging from -8.00 dB to 15.00 dB with a step of 0.25 dB to create **DS2N**. The size of **DS2N** is 93 times larger than the size of **DS2**. In other words, each level of SNR creates a new subset in **DS2N**, whose size is equal to **DS2**.
-
-
-# Folder Description
-- **dataset_build:** Build MFCC dataset based on collected drone audio. The format of the generated dataset is ".pkl".
-- **experiment:** The code of all experiments, which are mentioned in the paper. 
-- **runners:** These files help with the training and evaluation process.
-- **toolbox:** Some modules can be used in different programs.
-
-
-# Explaination of Config files
-- `originData_path`: The root of all drone audio.
-- `output_path`: Where to output/obtain the model.
-- `csv_savePath`: Where to save the evaluation results.
-- `pkl_savePath`: Where to save the dataset of extracted MFCC features.
-
-
-# At the Beginning
-Download the drone audio dataset, then change all `originData_path` in all config files to the root of download drone audio.
-
-
-# Experiment of Frame Length Change
-1. Run `./dataset_build/pkl_gen_timeVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1**.
-   - Default dataset storage path is `./pkl_dataset/1_timeVar`.
-2. Run `./experiment/timeVar/train_all_model.py` to train 8 different ML models on all generated datasets.
-   - Default model storage path is `./trained_model/1_timeVar`.
-3. Run `./experiment/timeVar/eval_all_model.py` to obtain the accuracy of each model on test set.
-   - Default csv storage path is `./result/1_timeVar`.
-
-
-# Filter-varying Experiment
-## Overview
-There are 9 config files for training different models.
-- `config_filterVar_1_oneThird`
-- `config_filterVar_1_twoThirds`
-- `config_filterVar_1_all`
-- `config_filterVar_2_oneThird`
-- `config_filterVar_2_twoThirds`
-- `config_filterVar_2_all`
-- `config_filterVar_3_oneThird`
-- `config_filterVar_3_twoThirds`
-- `config_filterVar_3_all`
-## PKL Generation
-1. Run `./dataset_build/pkl_gen_filterVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1**.
-## Training and Evaluation
-1. Change the name of config file in line 90 of `./experiment/filterVar/train_all_model_filterVar.py` to train different models.
-2. Change the name of config file in line 104 of `./experiment/filterVar/eval_all_model_filterVar.py` to evaluate different models.
-3. Run `./experiment/filterVar/train_all_model_filterVar.py`.
-   - Default model storage path is `./trained_model/2_filterVar/8d_x_xxxx`.
-4. Run `./experiment/filterVar/eval_all_model_filterVar.py`.
-   - Default csv storage path is `./result/2_filterVar/8d_x_xxxx`.
-
-
-# Filter-varying Experiment with AWGN
-## PKL Generation
-1. Run `./dataset_build/pkl_gen_filterVar_noise.py` to generate the dataset in `.pkl` format. This dataset is created from **DS1N**.
-## Evaluation
-1. Change the name of config file in line 107 of `./experiment/filterVar/eval_all_model_filterVar_noise.py` to evaluate different models.
-2. Run `./experiment/filterVar/eval_all_model_filterVar_noise.py`.
-   - Default csv storage path is `./result/3_filterVar_noise/8d_x_xxxx`.
-
-
-# Authentication of 24 drones without AWGN
-This experiment are conducted on **DS2**.
-## Training and Evaluation
-1. Run `./experiment/noiseVar/train_all_model_noNoise.py`.
-   - Default model storage path is `./trained_model/4_noiseVar/noNoise`.
-2. Run `./experiment/noiseVar/eval_all_model_noNoise.py`.
-   - The results will be shown in the console.
-
-
-# Authentication of 24 drones with AWGN
-This experiment are conducted on **DS2N**.
-## PKL Generation
-1. Run `./dataset_build/pkl_gen_noiseVar.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2N**.
-## Evaluation
-1. Run `./experiment/noiseVar/eval_all_model_noiseVar.py`.
-   - Default csv storage path is `./result/4_noiseVar`.
-
-
-# Security Study (Attack)
-1. Run `./dataset_build/pkl_gen_base.py` to generate the dataset in `.pkl` format. This dataset is created from **DS2**.
-2. Run `./experiment/attack/train_attack.py`.
-3. Record `dic_reg`, `dic_attack`, `dic_bg` shown in console.
-   - For example
-   ![This is an image](./attack_example_1.png)
-4. Change the value of `args.bg_type` and `args.attack_type` in `./experiment/attack/evaluate_attack.py` to `dic_bg` and `dic_attack`, respectively.
-   - For example
-   ![This is an image](./attack_example_2.png)
-5. Run `./experiment/attack/evaluate_attack.py`.
-   - The results will be shown in console.
-
-
-# License
-All code within this repository is under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-
-
-# Acknowledgements
-Our code integrated and modified the following repository:
-- [python_speech_features](https://github.com/jameslyons/python_speech_features)
+Project code is Apache-2.0. The reused MFCC core retains its
+[MIT license](toolbox/LICENSE_python_speech_features); the QDA compatibility fit
+retains [scikit-learn BSD-3-Clause attribution](LICENSE_sklearn_QDA).
+The dataset is distributed separately under CC BY 4.0.
