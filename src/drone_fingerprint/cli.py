@@ -14,6 +14,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Acoustic drone authentication: validated research workflow")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
+    monitor = commands.add_parser('monitor', help='Serve a read-only live paper-sweep dashboard on localhost')
+    monitor.add_argument('--run', type=Path, required=True, help='Paper sweep directory; may not exist yet')
+    monitor.add_argument('--log-root', type=Path, required=True, help='External attempt log directory used by paper')
+    monitor.add_argument('--port', type=int, default=8765, help='Loopback HTTP port; default 8765')
     run = commands.add_parser("run", help="Run one declared closed/open-set experiment")
     run.add_argument("--config", type=Path, required=True)
     run.add_argument("--audio-root", type=Path, required=True)
@@ -45,6 +49,10 @@ def main() -> int:
     synthetic.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
+        if args.command == 'monitor':
+            from .monitor import serve
+            serve(args.run, args.log_root, args.port)
+            return 0
         print("Initializing the numerical stack; startup may take time.", flush=True)
         if args.command == 'plot':
             from .plotting import render_results

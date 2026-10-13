@@ -61,3 +61,7 @@ The image fixes dependencies and base identity; it does not promise bitwise
 identical model files across CPUs. No multi-architecture, GPU or Windows
 container behavior has been tested. Refreshing the base or lock requires a new
 native/container smoke run and recorded numerical comparisons.
+
+For live container-training progress, run the [monitor](LIVE_MONITOR.md) on the
+Ubuntu host using the host run/log bind-mount paths. The webpage does not need
+access to the Docker socket.

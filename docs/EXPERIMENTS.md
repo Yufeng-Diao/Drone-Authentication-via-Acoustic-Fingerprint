@@ -111,6 +111,10 @@ coverage, dependencies, failure handling, interruption and result reuse.
 
 ## Observe a slow model
 
+For a browser dashboard with live task counts, phase, CPU/memory and attempt logs,
+see [the live monitor guide](LIVE_MONITOR.md). It works locally or over an SSH
+port forward and runs independently of the trainer.
+
 Each task prints its preset, model, feature settings, trial, SNR and completed
 task count. The header SNR value is in integer quarter-decibels; `None` means
 clean audio. Feature loading, model initialization, training, evaluation and

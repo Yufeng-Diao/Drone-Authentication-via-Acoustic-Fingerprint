@@ -58,6 +58,7 @@ multiple runs, units, panel mapping and Markdown/LaTeX exports.
 
 ## Guides for researchers
 
+- [Live training webpage and SSH port forwarding](docs/LIVE_MONITOR.md)
 - [Experiment selection, progress and recovery](docs/EXPERIMENTS.md)
 - [Frozen paper protocol](docs/PAPER_PROTOCOL.md) and [numerical corrections](docs/NUMERICAL_VALIDATION.md)
 - [Model compatibility decisions](docs/MODEL_MIGRATION.md), including the historical QDA SVD fit

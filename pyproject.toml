@@ -28,7 +28,7 @@ dev = ["pytest>=9.1.1,<10"]
 [tool.uv]
 required-version = "==0.13.0"
 # Rebuild local wheels after source edits, not just dependency metadata changes.
-cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.py" }, { file = "toolbox/**/*.py" }, { file = "README.md" }, { file = "LICENSE" }, { file = "LICENSE_sklearn_QDA" }, { file = "toolbox/LICENSE_python_speech_features" }]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.py" }, { file = "src/**/*.html" }, { file = "src/**/*.css" }, { file = "src/**/*.js" }, { file = "toolbox/**/*.py" }, { file = "README.md" }, { file = "LICENSE" }, { file = "LICENSE_sklearn_QDA" }, { file = "toolbox/LICENSE_python_speech_features" }]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/drone_fingerprint", "toolbox"]

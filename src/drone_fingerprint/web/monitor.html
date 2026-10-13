@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acoustic Fingerprint · Live Monitor</title>
+  <link rel="stylesheet" href="/monitor.css"><script src="/monitor.js" defer></script>
+</head>
+<body>
+<header><a class="brand" href="/">AF <span>ACOUSTIC FINGERPRINT</span></a><span class="connection" id="connection" role="status">Connecting…</span></header>
+<main>
+  <div class="heading"><div><p class="eyebrow">EXPERIMENT OBSERVATORY</p><h1 id="run-name">Live training monitor</h1><p id="run-path" class="muted"></p></div><span id="run-status" class="badge">Waiting</span></div>
+  <p id="notice" class="notice" role="status">Waiting for the first snapshot.</p>
+  <section class="summary" aria-label="Run summary">
+    <article class="card"><p class="label">Tasks completed</p><strong id="completed">—</strong><progress id="completion-bar" max="100" value="0" aria-label="Completed task fraction"></progress><p class="muted" id="counts">Waiting for a sweep</p></article>
+    <article class="card"><p class="label">Current runner phase</p><strong id="phase">—</strong><p class="muted" id="phase-time">No fit percentage or ETA is assumed.</p></article>
+    <article class="card"><p class="label">Wall time since run creation</p><strong id="elapsed">—</strong><p class="muted">Includes pauses and previous attempts.</p></article>
+    <article class="card"><p class="label">Process CPU / resident memory</p><strong id="resources">—</strong><p class="muted" id="process-info">Live runner counters only</p></article>
+  </section>
+  <div class="columns">
+    <section class="panel"><div class="section-heading"><h2>Process activity</h2><span class="muted">Latest 6 minutes in this browser</span></div>
+      <div class="chart-label"><span>CPU · % of one core</span><span id="cpu-value">—</span></div><svg id="cpu-chart" viewBox="0 0 600 95" role="img" aria-label="Recent process CPU usage"></svg>
+      <div class="chart-label"><span>Resident memory · MiB</span><span id="rss-value">—</span></div><svg id="rss-chart" viewBox="0 0 600 95" role="img" aria-label="Recent resident memory usage"></svg>
+      <p class="muted small" id="io">Storage I/O counters unavailable.</p><p class="muted small">Activity does not establish convergence. Native fits can delay Ctrl-C; silence is not a reason to start another fit.</p>
+    </section>
+    <section class="panel"><div class="section-heading"><h2>Experiment coverage</h2><span class="muted">Completed / selected</span></div><div class="scroll"><table id="coverage"><caption class="sr-only">Completion by classifier and preset</caption></table></div><p class="muted small">Task fractions are counts, not a runtime estimate. Missing presets are unselected.</p></section>
+  </div>
+  <section class="panel"><div class="section-heading"><h2>Tasks</h2><span class="muted" id="task-range"></span></div>
+    <div class="filters"><label>Status<select id="status-filter"><option value="">All statuses</option><option>running</option><option>pending</option><option>completed</option><option>failed</option><option>interrupted</option></select></label><label>Model<select id="model-filter"><option value="">All models</option><option>QDA</option><option>LDA</option><option>LSVM</option><option>RBF-SVM</option><option>KNN</option><option>DT</option><option>RF</option><option>GNB</option></select></label><label class="search">Find task<input id="search" type="search" placeholder="Preset, task ID, filter count…"></label></div>
+    <div class="scroll"><table><thead><tr><th>Task / classifier</th><th>Frame / filters</th><th>Blocks / fraction</th><th>Test / trial</th><th>Status</th><th>Attempts</th></tr></thead><tbody id="tasks"></tbody></table></div>
+    <div class="pagination"><button id="previous">Previous</button><button id="next">Next</button></div>
+  </section>
+  <section class="panel"><div class="section-heading"><div><h2>Attempt inspector</h2><p class="muted" id="selected-name">Automatically follows the current task.</p></div><button id="follow">Follow current task</button></div>
+    <p id="selected-state" class="muted"></p><p id="task-error" class="error"></p><div id="attempts" class="attempts"></div>
+    <div class="section-heading"><h3>Latest attempt log</h3><label class="check"><input id="scroll-log" type="checkbox" checked> Follow log tail</label></div><pre id="log" tabindex="0" aria-label="Latest attempt log">Waiting for logs…</pre><p class="muted small" id="log-note">Last 32 KiB only. Complete transcripts remain in the external log directory.</p>
+  </section>
+  <footer>READ-ONLY MONITOR · Refreshes every 3 seconds · <span id="updated">No snapshot yet</span><br>Closing this page or stopping the monitor does not stop training. Completion reflects the task ledger; artifact validation remains the responsibility of resume and result export.</footer>
+</main>
+</body></html>

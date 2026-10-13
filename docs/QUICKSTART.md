@@ -87,6 +87,8 @@ validation sweep and automatic task recovery. Change `frame_ms`, `n_filters` or 
 study and use a fresh output directory. Optional `blocks`, `portion`, and
 `test_snr_quarter_db` fields are described in the numerical validation guide.
 
+For a real-time browser view of paper sweeps, see [live monitoring over SSH](LIVE_MONITOR.md).
+
 ## What the run writes and displays
 
 | File | Contents |
