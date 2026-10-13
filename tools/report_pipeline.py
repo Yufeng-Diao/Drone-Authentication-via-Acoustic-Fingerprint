@@ -81,6 +81,7 @@ def main():
     parser.add_argument('--evidence',type=Path,required=True)
     args=parser.parse_args()
     output=external_path(args.evidence)
+    previous_manifest=json.loads((output/'manifest.json').read_text()) if (output/'manifest.json').exists() else {}
     criteria=json.loads((output/'acceptance.json').read_text())
     test_counts={}
     for version in ('314','313'):
@@ -153,8 +154,8 @@ def main():
     ax.set(ylabel='Read syscall bytes / P2',ylim=(0,1),title='Original acceptance threshold retained');ax.legend()
     save(fig,'refinement')
 
-    manifest={'phase':'P3','status':'passed','generated_at':datetime.now(timezone.utc).isoformat(),
-              'source_commit':'pending local phase commit','baseline_commit':criteria['baseline_commit'],
+    manifest={**previous_manifest,'phase':'P3','status':'passed','generated_at':datetime.now(timezone.utc).isoformat(),
+              'source_commit':previous_manifest.get('source_commit','pending local phase commit'),'baseline_commit':criteria['baseline_commit'],
               'tests':test_counts,'recording_index':inventory,'numerical_checks':checks,'summaries':summaries,'resource_ratios':ratios,'resource_limits':limits,
               'platform':'Ubuntu 24.04, CPython 3.14.8 benchmark; 3.13 compatibility checked separately',
               'scope':'Fixed subset and GNB. No full paper/all-model fit claim. No physical cold-disk claim.',
