@@ -1,0 +1,9 @@
+# Generated artifacts belong outside this repository; these are fallback rules.
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.log
+refactor_artifacts/
+refactor_evidence/

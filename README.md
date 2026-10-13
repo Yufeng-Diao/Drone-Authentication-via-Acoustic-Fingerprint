@@ -1,4 +1,10 @@
 # Drone Authentication via Acoustic Fingerprint
+
+> Refactoring branch: P0 data and protocol specifications are available in
+> [the paper protocol guide](docs/PAPER_PROTOCOL.md), including a validator that
+> does not require the training dependencies. The modern training environment and
+> runner are still pending. Instructions below describe the historical pipeline.
+
 The following content/function will be added：
 - [x] Basic tutorial about this project.
 - [x] Platform specification.
