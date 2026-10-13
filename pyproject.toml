@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "drone-acoustic-fingerprint"
+version = "0.1.0"
+description = "Reproducible acoustic drone authentication research"
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+license = "Apache-2.0"
+license-files = ["LICENSE", "toolbox/LICENSE_python_speech_features"]
+dependencies = [
+  "numpy>=2.5.4,<3",
+  "scipy>=1.18.1,<2",
+  "scikit-learn>=1.9.1,<2",
+  "matplotlib>=3.11.2,<4",
+  "joblib>=1.6.0,<2",
+]
+
+[project.scripts]
+drone-auth = "drone_fingerprint.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=9.1.1,<10"]
+
+[tool.uv]
+required-version = "==0.13.0"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/drone_fingerprint", "toolbox"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

@@ -1,0 +1,55 @@
+name: Modern environment smoke checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        python: ["3.13.16", "3.14.8"]
+    runs-on: ${{ matrix.os }}
+    env:
+      UV_PROJECT_ENVIRONMENT: ${{ runner.temp }}/drone-environment
+      UV_CACHE_DIR: ${{ runner.temp }}/uv-cache
+      UV_PYTHON_INSTALL_DIR: ${{ runner.temp }}/python
+      MPLCONFIGDIR: ${{ runner.temp }}/matplotlib
+      MPLBACKEND: Agg
+      PYTHONPATH: ""
+      PYTHONNOUSERSITE: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install uv==0.13.0
+      - run: uv sync --locked --no-editable --python ${{ matrix.python }}
+      - name: Prepare external evidence directory
+        run: python -c "import os, pathlib; pathlib.Path(os.environ['RUNNER_TEMP'], 'drone-evidence').mkdir()"
+      - name: Regression tests
+        run: uv run --locked --no-editable --python ${{ matrix.python }} python -I -B -m pytest --basetemp "${{ runner.temp }}/drone-tests" --junitxml "${{ runner.temp }}/drone-evidence/tests.xml"
+      - name: Audit estimator defaults
+        run: uv run --locked --no-editable --python ${{ matrix.python }} python -I -B tools/audit_models.py
+      - name: Installed CLI and synthetic WAV workflow
+        run: uv run --locked --no-editable --python ${{ matrix.python }} drone-auth synthetic --output "${{ runner.temp }}/drone-evidence/synthetic"
+      - name: Upload separate test evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: smoke-${{ matrix.os }}-${{ matrix.python }}
+          path: ${{ runner.temp }}/drone-evidence
+          if-no-files-found: warn

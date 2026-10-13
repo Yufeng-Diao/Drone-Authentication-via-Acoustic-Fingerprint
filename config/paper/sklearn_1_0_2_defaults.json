@@ -1,0 +1,107 @@
+{
+  "sklearn_version": "1.0.2",
+  "source_urls": [
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/discriminant_analysis.py",
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/svm/_classes.py",
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/neighbors/_classification.py",
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/tree/_classes.py",
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/ensemble/_forest.py",
+    "https://raw.githubusercontent.com/scikit-learn/scikit-learn/1.0.2/sklearn/naive_bayes.py"
+  ],
+  "constructors": {
+    "LinearDiscriminantAnalysis": {
+      "solver": "svd",
+      "shrinkage": null,
+      "priors": null,
+      "n_components": null,
+      "store_covariance": false,
+      "tol": 0.0001,
+      "covariance_estimator": null
+    },
+    "QuadraticDiscriminantAnalysis": {
+      "priors": null,
+      "reg_param": 0.0,
+      "store_covariance": false,
+      "tol": 0.0001
+    },
+    "LinearSVC": {
+      "penalty": "l2",
+      "loss": "squared_hinge",
+      "dual": true,
+      "tol": 0.0001,
+      "C": 1.0,
+      "multi_class": "ovr",
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "class_weight": null,
+      "verbose": 0,
+      "random_state": null,
+      "max_iter": 1000
+    },
+    "SVC": {
+      "C": 1.0,
+      "kernel": "rbf",
+      "degree": 3,
+      "gamma": "scale",
+      "coef0": 0.0,
+      "shrinking": true,
+      "probability": false,
+      "tol": 0.001,
+      "cache_size": 200,
+      "class_weight": null,
+      "verbose": false,
+      "max_iter": -1,
+      "decision_function_shape": "ovr",
+      "break_ties": false,
+      "random_state": null
+    },
+    "KNeighborsClassifier": {
+      "n_neighbors": 5,
+      "weights": "uniform",
+      "algorithm": "auto",
+      "leaf_size": 30,
+      "p": 2,
+      "metric": "minkowski",
+      "metric_params": null,
+      "n_jobs": null
+    },
+    "DecisionTreeClassifier": {
+      "criterion": "gini",
+      "splitter": "best",
+      "max_depth": null,
+      "min_samples_split": 2,
+      "min_samples_leaf": 1,
+      "min_weight_fraction_leaf": 0.0,
+      "max_features": null,
+      "random_state": null,
+      "max_leaf_nodes": null,
+      "min_impurity_decrease": 0.0,
+      "class_weight": null,
+      "ccp_alpha": 0.0
+    },
+    "RandomForestClassifier": {
+      "n_estimators": 100,
+      "criterion": "gini",
+      "max_depth": null,
+      "min_samples_split": 2,
+      "min_samples_leaf": 1,
+      "min_weight_fraction_leaf": 0.0,
+      "max_features": "auto",
+      "max_leaf_nodes": null,
+      "min_impurity_decrease": 0.0,
+      "bootstrap": true,
+      "oob_score": false,
+      "n_jobs": null,
+      "random_state": null,
+      "verbose": 0,
+      "warm_start": false,
+      "class_weight": null,
+      "ccp_alpha": 0.0,
+      "max_samples": null
+    },
+    "GaussianNB": {
+      "priors": null,
+      "var_smoothing": 1e-09
+    }
+  }
+}

@@ -1,9 +1,22 @@
 # Drone Authentication via Acoustic Fingerprint
 
-> Refactoring branch: P0 data and protocol specifications are available in
-> [the paper protocol guide](docs/PAPER_PROTOCOL.md), including a validator that
-> does not require the training dependencies. The modern training environment and
-> runner are still pending. Instructions below describe the historical pipeline.
+The modern workflow targets Python 3.14.8, with Python 3.13.16 compatibility
+checks, and uses `uv.lock` for exact dependency versions. Start with the
+[modern quickstart](docs/QUICKSTART.md) to install into an external environment
+and run `drone-auth synthetic` or a small public-data closed-set experiment.
+
+The [paper protocol guide](docs/PAPER_PROTOCOL.md) records the dataset selection
+and scientific decisions. The [model migration audit](docs/MODEL_MIGRATION.md)
+explains estimator defaults. The current CLI supports clean base MFCCs and one
+model per run. Full sweeps, corrected delta features, cache management and paper
+figure generation are still being implemented. Smoke results are not paper
+reproduction results. Linux has been exercised locally; Windows CI is prepared
+but unverified until its jobs actually pass.
+
+## Historical workflow
+
+The instructions below and `environment.yml` describe the original release.
+They are retained for reference and are not the modern installation path.
 
 The following content/function will be added：
 - [x] Basic tutorial about this project.

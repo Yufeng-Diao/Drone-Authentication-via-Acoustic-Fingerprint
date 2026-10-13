@@ -5,8 +5,9 @@ Created on Tue Feb 22 20:49:41 2022
 @author: Eidos
 """
 
-import toolbox.audio_processing
-import toolbox.info_detector_drone
-import toolbox.pyeidos_fft
-import toolbox.MFCC_extract
-from toolbox.pyeidos_plot import CMatrix
+# Modified for P1: numerical imports must not load the legacy plotting stack.
+def __getattr__(name):
+    if name == "CMatrix":
+        from toolbox.pyeidos_plot import CMatrix
+        return CMatrix
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

@@ -3,8 +3,10 @@
 P0 establishes the data and experimental specification for **acsac2022-modern-v1**.
 It does not implement the new training pipeline or claim to reproduce the paper's
 numerical results. The legacy entry points do not consume these JSON files yet.
-P1 establishes the modern locked environment, P2 validates numerical changes, and
-P4 connects the experiment runner to these presets.
+P1 now provides a locked modern environment and a small base-MFCC closed-set
+workflow; see the [quickstart](QUICKSTART.md). Windows execution remains
+unverified. P2 validates numerical changes, and P4 connects the complete
+experiment runner to these presets.
 
 The scientific reference is [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653),
 ACSAC 2022. Printed page numbers below refer to that paper. Historical implementation
