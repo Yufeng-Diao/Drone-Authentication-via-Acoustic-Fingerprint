@@ -141,11 +141,13 @@ is not a cache and is never automatically used as an input. No CSV/PKL feature
 tables or sliced WAVs are generated. A failed run writes `failure.json`; a success
 marker is written last. Atomic writes and reusable feature caching belong to P3.
 
-P2 intentionally retains the unoptimized read path: hash each selected complete
+The historical P2 baseline intentionally retained the unoptimized read path: hash each selected complete
 WAV, read its payload again, and convert to float64 before interval selection.
-Even the 60-second noise subset currently decodes the complete 3,628-second room
+Even the 60-second noise subset decoded the complete 3,628-second room
 recording. This makes its memory cost visible for the P3 baseline. Do not describe
 P2 memory/I/O measurements as optimized or as evidence about hardware failure.
+The maintained workflow uses the bounded [P3 cache pipeline](DATA_PIPELINE.md);
+[full-run measurements](REPRODUCTION_RESULTS.md) describe P6.
 
 Generate an external visual numerical comparison with:
 

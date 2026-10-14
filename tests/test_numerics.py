@@ -221,3 +221,17 @@ def test_short_padded_frames_and_fraction_selection_reference():
     np.testing.assert_allclose(select_features(base, Settings(n_filters=26, portion=1))[0], expected)
     for length, expected_frames in [(1, 1), (44100, 1), (44101, 2), (66150, 2), (66151, 3)]:
         assert extract_segment(np.ones(length), Settings()).shape == (expected_frames, 49)
+
+
+def test_background_label_order_changes_knn_vote_ties():
+    """A background label is scientifically observable when eight votes tie."""
+    from drone_fingerprint.models import make_model
+
+    features = np.arange(8, dtype=float).reshape(-1, 1)
+    labels = np.array([0, 0, 0, 0, 1, 1, 1, 1])
+    query = np.array([[3.5]])
+    background_first = make_model('KNN').fit(features, labels).predict(query)
+    background_last = make_model('KNN').fit(features, np.where(labels == 0, 25, labels)).predict(query)
+    background_last = np.where(background_last == 25, 0, background_last)
+    assert background_first.tolist() == [0]
+    assert background_last.tolist() == [1]

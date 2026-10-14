@@ -1,9 +1,11 @@
 # Full experiment and release status
 
-The full public-data sweep is running on Ubuntu using the validated implementation
-at revision `62f6d2e`. This is an ongoing corrected rerun, not a completed paper
-reproduction. The configured grid contains 4,096 fits and 4,344 evaluations reusing
-clean models. Missing and failed tasks remain visible; task count is not an ETA.
+The full public-data sweep and local P6 acceptance are complete on Ubuntu using
+the validated scientific implementation at revision `62f6d2e`. All 8,440 tasks
+completed, including 4,096 fits and 4,344 evaluations reusing clean models.
+See [the measured results and scientific differences](REPRODUCTION_RESULTS.md).
+This is a complete corrected-protocol rerun, not exact recovery of every
+historical score. Remote CI, push and publication have not been performed.
 
 Use [the live monitor](LIVE_MONITOR.md) to observe a sweep locally or through SSH.
 A full run can outlive an interactive session. Keep the trainer detached, preserve
@@ -26,9 +28,10 @@ outside the checkout. A monitor restart does not resume a failed trainer.
 - Reproducibility checks, researcher-facing review and the final release review
   are complete. Local checks and remote CI are reported separately.
 
-These criteria are pending until the complete results and final review exist.
-The existing regression suite, real-data subset checks, browser monitoring and
-container smoke checks validate the workflow; they do not replace the full run.
+The local criteria above have been checked, including complete artifact hashes,
+eight full-data classifier repeats and controlled open-set label-order diagnostics.
+Remaining publication actions are remote CI, push and release review on the host
+repository when authorized. Local tests are not represented as remote CI results.
 
 ## Maintained and historical code
 

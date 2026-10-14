@@ -69,10 +69,12 @@ multiple runs, units, panel mapping and Markdown/LaTeX exports.
 - [Historical workflow reference](docs/LEGACY_WORKFLOW.md), for the original release only
 
 The full plan contains 4,096 fits plus 4,344 evaluations reusing clean models.
-Use `--dry-run` before selecting it. Current validation covers fixed subsets;
-the full corrected rerun is in progress. Full reproduction, remote CI execution
-and release publication are not yet complete. Results incorporate documented implementation corrections and do not
-promise exact agreement with historical tables. Recording-held-out or new-room
+Use `--dry-run` before selecting it. The full corrected-protocol rerun completed
+all 8,440 tasks.
+[Results and scientific differences](docs/REPRODUCTION_RESULTS.md) include a
+consequential open-set label-order effect; historical scores are not all identical.
+Remote CI and release publication remain separate actions. Results incorporate
+documented implementation corrections. Recording-held-out or new-room
 generalization is not established by the paper's within-recording split.
 
 ## License

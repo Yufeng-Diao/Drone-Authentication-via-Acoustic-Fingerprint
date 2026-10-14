@@ -149,3 +149,14 @@ This requires Matplotlib and the bundle's `manifest.json`,
 rejects output inside the repository and detects configuration changes since
 validation. Plotting dependency versions are recorded in each run manifest;
 the committed lockfile specifies the modern reporting environment.
+
+
+## P6 label-order finding
+
+The modern implementation assigns background label 0 and preserves registered
+identity labels 1–24. Historical PKL training assigned background the largest
+label instead. Class order affects KNN vote ties and the configured capped
+RBF-SVM solver in controlled full-data comparisons. The frozen rerun retains its
+original encoding; a separately labelled diagnostic restores background-last
+ordering without changing feature values. See [full results and differences](REPRODUCTION_RESULTS.md).
+Do not treat background renumbering as a numerically invariant operation.
