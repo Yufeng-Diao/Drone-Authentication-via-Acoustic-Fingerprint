@@ -82,3 +82,39 @@ currently completed task is used. Stale successful attempts are not recovered
 by scanning directories. Checksums, configuration, provenance, prediction counts,
 metrics and confusion matrices are checked before creating output. A fresh
 output directory is required; existing figures and input sweeps are preserved.
+
+
+## Compare new results with the published figure images
+
+`tools/report_paper_comparison.py` reads a completed gallery and redraws Figures
+2–5 using the author's historical plotting styles. It preserves all 8,352 measured
+points and the model-name mapping. It creates an offline side-by-side report,
+standalone PNG/SVG/PDF plots, comparison PDFs and individual Figure 3/4 panels.
+It does not train or load models, features or audio.
+
+```bash
+# PDF rendering needs the Ubuntu poppler-utils system package.
+uv run --locked python tools/report_paper_comparison.py \
+  --gallery ../refactor_evidence/full-paper-gallery \
+  --paper-pdf ../ACSAC_Yufeng.pdf \
+  --output ../refactor_evidence/paper-comparison-001
+```
+
+Open `index.html` in the fresh output directory. Expand individual panels to
+compare them at a readable size. New figures follow the original colors, line
+styles, markers, legends and axis limits from `varTime_plot.py`,
+`varFilt_plot_all.py` and `varNoise_plot.py`. A portable serif font replaces the
+machine-specific Times New Roman dependency. Below-axis point counts are explicit;
+where necessary, an additional 0–100% export exposes every measured value.
+
+The reference images are rendered directly from the author-supplied manuscript.
+The PDF checksum is checked because crop coordinates refer to that exact revision
+of `ACSAC_Yufeng.pdf`; another PDF requires reviewed crop coordinates and checksum.
+The PDF and private plotting scripts are not distributed with this repository.
+The ordinary `drone-auth plot` command does not require this PDF or Poppler.
+
+Original curve CSV files were not retained. This report supports visual comparison
+with the published curves; it does not invent reference data or compute a
+pointwise error from pixels. It always displays the frozen primary results,
+not the separate open-set label-order diagnostic. See
+[the scientific differences](REPRODUCTION_RESULTS.md).
