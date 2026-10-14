@@ -9,6 +9,8 @@ and the diagnostic plots are exported from verified saved predictions.
 This establishes execution of the corrected protocol. It does **not** establish
 exact recovery of every score in the historical paper. Keep the original paper,
 primary rerun and controlled diagnostics distinct when reporting results.
+The [claim-by-claim assessment](CLAIM_ASSESSMENT.md) identifies which scientific
+conclusions remain supported and which statements need qualification.
 
 ## Closed-set authentication
 
