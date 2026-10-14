@@ -1,6 +1,6 @@
 # Drone Authentication via Acoustic Fingerprint
 
-Reproducible research code for the [ACSAC 2022 paper](https://doi.org/10.1145/3564625.3564653)
+Maintained research code for the [ACSAC 2022 paper](https://doi.org/10.1145/3564625.3564653)
 by Yufeng Diao, Yichi Zhang, Guodong Zhao and Mohamed Khamis. The maintained
 workflow runs on **Ubuntu**, with **Python 3.14.8** and **3.13.16** compatibility
 checks. Exact scientific dependencies are recorded in `uv.lock`.
@@ -10,6 +10,49 @@ batches, trains the eight paper classifiers, and generates figures and tables
 from saved results. It uses shared NumPy arrays instead of per-frame CSV/PKL
 files. Slow phases show elapsed time, CPU and memory; interrupted paper tasks
 restart in new attempts while verified completions are reused.
+
+## Relationship to the published paper
+
+The updated implementation continues to support the paper's central feasibility
+findings and QDA as a strong balanced choice for the evaluated closed-set and
+open-set tasks. Some feature-extraction findings, exact rankings and numerical
+thresholds have changed. The current results do not reproduce every published
+number or conclusion.
+
+The full rerun completed all **8,440 tasks**. Confirmed bug fixes, changes to
+experimental conventions and dependency updates are documented separately.
+Published values, frozen rerun results and controlled diagnostics remain distinct.
+The evidence applies to the paper's indoor, within-recording evaluation; it does
+not establish unseen-room, held-out-recording or replay-attack robustness.
+
+Read the detailed reports:
+
+- [Claim-by-claim assessment](docs/CLAIM_ASSESSMENT.md): which conclusions remain
+  supported, which need qualification, and the evidence for each judgment.
+- [Full-run results and scientific differences](docs/REPRODUCTION_RESULTS.md):
+  measured values, reproducibility checks, resources and label-order diagnostics.
+- [Numerical corrections](docs/NUMERICAL_VALIDATION.md) and
+  [experimental conventions](docs/PAPER_PROTOCOL.md): what changed and why.
+- [Figures and direct paper comparisons](docs/FIGURES.md): generate the figure
+  gallery and compare the new measurements with the author-provided paper PDF.
+
+When reporting experiments, cite the paper and identify the software release or
+commit, dependency lock and configuration used. Label baselines by their actual
+implementation version rather than treating new measurements as published values.
+
+## Maintained and original versions
+
+Use the workflow below for new experiments. The original public implementation
+is preserved separately as `legacy/acsac2022`, at the fixed
+[pre-refactor commit `88d0098`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/88d0098b189b8cb48da3ec05ab81f7890b36d6b5).
+Its original code and documentation remain unchanged in that snapshot. The branch
+is prepared locally; remote publication and the transition of the maintained
+implementation to `main` are tracked in [release status](docs/RELEASE_STATUS.md).
+
+The historical snapshot is for inspection and comparison. Its old environment
+and entry points are outside the maintained Ubuntu workflow, and preserving the
+snapshot does not certify exact recovery of the original paper execution.
+See the [historical workflow reference](docs/LEGACY_WORKFLOW.md).
 
 ## Start here
 
@@ -69,13 +112,8 @@ multiple runs, units, panel mapping and Markdown/LaTeX exports.
 - [Historical workflow reference](docs/LEGACY_WORKFLOW.md), for the original release only
 
 The full plan contains 4,096 fits plus 4,344 evaluations reusing clean models.
-Use `--dry-run` before selecting it. The full corrected-protocol rerun completed
-all 8,440 tasks.
-[Results and scientific differences](docs/REPRODUCTION_RESULTS.md) include a
-consequential open-set label-order effect; historical scores are not all identical.
-Remote CI and release publication remain separate actions. Results incorporate
-documented implementation corrections. Recording-held-out or new-room
-generalization is not established by the paper's within-recording split.
+Use `--dry-run` before selecting it. See [release status](docs/RELEASE_STATUS.md)
+for the distinction between completed local validation and pending publication.
 
 ## License
 

@@ -49,3 +49,43 @@ The paper's alternating within-recording train/test split is retained. Results
 do not establish recording-held-out, unseen-room or adversarial replay robustness.
 Original plots have no preserved source CSV; curve comparisons must identify any
 visual interpretation rather than invent pointwise reference measurements.
+
+
+## Preserving the original public implementation
+
+The local `legacy/acsac2022` branch points to the pre-refactor public commit
+[`88d0098b189b8cb48da3ec05ab81f7890b36d6b5`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/88d0098b189b8cb48da3ec05ab81f7890b36d6b5).
+It preserves the original public tree and history, not the private development
+repository. Keep this branch frozen and make future maintenance changes on the
+maintained line. The permanent commit link remains usable independently of branch
+publication. No claim is made that the historical runtime has been reconstructed.
+
+On 14 October 2026, a read-only remote check confirmed that `origin/main` still
+points to this original commit and that the legacy branch is not yet published.
+The maintained work remains on `refactor/reproducible-pipeline`; `main` has not
+been moved. Before publishing the transition:
+
+1. Publish `legacy/acsac2022` and verify its remote commit matches the pinned hash.
+2. Refresh the remote state, review the maintained branch and run remote CI.
+   Resolve any newer upstream changes without rewriting the historical snapshot.
+3. Merge the maintained branch into `main` with history preserved. Avoid a squash
+   or rebase merge: scientific records reference intermediate validation commits.
+   A fast-forward is also suitable if the reviewed `main` remains an ancestor.
+4. Update the README's publication status and add the public legacy-branch link.
+   Record the maintained release commit so users can cite their actual version.
+
+These are publication steps, not actions already performed. The two source
+worktrees share Git history, so preserving the legacy branch does not require a
+new repository or copying code. The current original worktree has `main` checked
+out; a later update to that worktree will display the maintained code after the
+merge. Use the pinned commit or the legacy branch to inspect the original version.
+
+## Report links and generated evidence
+
+The README links to version-controlled English reports so those links work in
+fresh clones. Generated HTML comparisons, figures, logs and large experiment
+artifacts remain outside source checkouts. They have no public hosting URL yet.
+If publishing these bundles separately as release assets or a report site, add
+links only after the public destination exists and has been checked. Do not put
+local workspace paths in the public README or commit runtime evidence to make
+those paths appear to work.

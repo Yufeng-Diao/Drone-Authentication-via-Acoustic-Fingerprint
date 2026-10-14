@@ -1,7 +1,11 @@
 # Historical workflow reference
 
 These instructions describe the original release and its old environment.
-Use the modern root README for supported commands.
+Use the modern root README for supported commands. The unchanged pre-refactor
+public implementation is preserved at
+[commit `88d0098`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/88d0098b189b8cb48da3ec05ab81f7890b36d6b5)
+on the local `legacy/acsac2022` branch. See [release status](RELEASE_STATUS.md)
+for remote availability and the planned transition to `main`.
 
 ## Historical workflow
 
