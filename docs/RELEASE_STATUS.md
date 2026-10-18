@@ -5,7 +5,17 @@ the validated scientific implementation at revision `62f6d2e`. All 8,440 tasks
 completed, including 4,096 fits and 4,344 evaluations reusing clean models.
 See [the measured results and scientific differences](REPRODUCTION_RESULTS.md).
 This is a complete corrected-protocol rerun, not exact recovery of every
-historical score. Remote CI, push and publication have not been performed.
+historical score. The maintained workflow is published on `main`, which remains
+the default branch. The original version is preserved on the public
+[`legacy/acsac2022` branch](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/legacy/acsac2022).
+
+Both Ubuntu interpreter jobs passed [remote CI](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/actions/runs/39155417609)
+on revision `7554b95dd72014ce0cdf231ae6975bc093b0c34d`, covering regression tests,
+model-default auditing, installed-package synthetic execution and paper-plan
+expansion. CI does not download the full audio dataset or repeat the full sweep.
+The initial remote attempt exposed an invalid job-level `runner.temp` reference;
+the workflow now sets external runtime paths after the runner starts. This fix
+changes CI setup only, not the scientific implementation or published Docker image.
 
 Use [the live monitor](LIVE_MONITOR.md) to observe a sweep locally or through SSH.
 A full run can outlive an interactive session. Keep the trainer detached, preserve
@@ -30,8 +40,9 @@ outside the checkout. A monitor restart does not resume a failed trainer.
 
 The local criteria above have been checked, including complete artifact hashes,
 eight full-data classifier repeats and controlled open-set label-order diagnostics.
-Remaining publication actions are remote CI, push and release review on the host
-repository when authorized. Local tests are not represented as remote CI results.
+Remote validation and branch publication complement those local results; their
+scopes remain distinct. Future changes should be developed on a topic branch,
+checked in CI, and merged into `main` with commit history preserved.
 
 ## Maintained and historical code
 
@@ -53,32 +64,29 @@ visual interpretation rather than invent pointwise reference measurements.
 
 ## Preserving the original public implementation
 
-The local `legacy/acsac2022` branch points to the pre-refactor public commit
+The public [`legacy/acsac2022` branch](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/legacy/acsac2022)
+points to the pre-refactor public commit
 [`88d0098b189b8cb48da3ec05ab81f7890b36d6b5`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/88d0098b189b8cb48da3ec05ab81f7890b36d6b5).
 It preserves the original public tree and history, not the private development
-repository. Keep this branch frozen and make future maintenance changes on the
-maintained line. The permanent commit link remains usable independently of branch
-publication. No claim is made that the historical runtime has been reconstructed.
+repository. Keep this branch frozen and make maintenance changes on `main` through
+a reviewed topic branch. The permanent commit link identifies the snapshot even
+if branch settings change. Historical runtime reconstruction is not implied.
 
-On 14 October 2026, a read-only remote check confirmed that `origin/main` still
-points to this original commit and that the legacy branch is not yet published.
-The maintained work remains on `refactor/reproducible-pipeline`; `main` has not
-been moved. Before publishing the transition:
+The original branch was published and its remote SHA verified before the
+maintained branch was advanced to `main`. The transition used fast-forward
+integration, preserving all original and refactoring commits. Do not squash or
+rebase the scientific history: earlier validation reports reference those commits.
 
-1. Publish `legacy/acsac2022` and verify its remote commit matches the pinned hash.
-2. Refresh the remote state, review the maintained branch and run remote CI.
-   Resolve any newer upstream changes without rewriting the historical snapshot.
-3. Merge the maintained branch into `main` with history preserved. Avoid a squash
-   or rebase merge: scientific records reference intermediate validation commits.
-   A fast-forward is also suitable if the reviewed `main` remains an ancestor.
-4. Update the README's publication status and add the public legacy-branch link.
-   Record the maintained release commit so users can cite their actual version.
+The paper's old `Eidos1970` repository URL currently redirects to the repository
+under `Yufeng-Diao` and displays its default branch. Use the current repository
+URL in new documentation. The default branch remains `main`; explicit links to
+`legacy/acsac2022` show the original version.
 
-These are publication steps, not actions already performed. The two source
-worktrees share Git history, so preserving the legacy branch does not require a
-new repository or copying code. The current original worktree has `main` checked
-out; a later update to that worktree will display the maintained code after the
-merge. Use the pinned commit or the legacy branch to inspect the original version.
+## Local worktrees
+
+The original public checkout stays on `legacy/acsac2022`, retaining its original
+files. The maintained checkout uses `main`. They share Git history and remote
+configuration; changing a branch's files does not require a second repository.
 
 ## Report links and generated evidence
 
@@ -99,5 +107,5 @@ Its source revision is `7aa6c2a468796bb01a9a9b0b21a2e8fef6e6778e`.
 The [container guide](CONTAINER.md#image-availability-and-validation) records its
 immutable digest and checks. Anonymous registry access returned the validated
 image; an execution check uses the digest directly. Docker Hub publication is
-separate from the pending GitHub branch publication and remote CI. No full-paper
+separate from GitHub branch publication and remote CI. No full-paper
 container training or additional architecture validation is implied.

@@ -46,10 +46,9 @@ code. Both methods use the same implementation and dependency lock.
    [live monitoring](#watch-training-and-resume).
 5. [Export figures, tables and a paper comparison](#generate-figures-and-tables).
 
-Run commands from the root of a checkout containing this README. The maintained
-implementation is currently on `refactor/reproducible-pipeline`; publication to
-`main` is pending. An old public checkout does not yet provide this CLI. See
-[version history](#maintained-and-original-versions) for the preserved original.
+Run commands from the root of a checkout of the maintained `main` branch.
+The original release remains available separately; see
+[version history](#maintained-and-original-versions).
 
 ## Install and set paths
 
@@ -346,11 +345,12 @@ using the maintained implementation, and is not claimed for every configuration.
 ## Maintained and original versions
 
 Use the workflow above for new experiments. The original public implementation
-is preserved separately as `legacy/acsac2022`, at the fixed
+is preserved on the public [`legacy/acsac2022` branch](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/legacy/acsac2022), at the fixed
 [pre-refactor commit `88d0098`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/tree/88d0098b189b8cb48da3ec05ab81f7890b36d6b5).
-Its original code and documentation remain unchanged in that snapshot. The branch
-is prepared locally; remote publication and the transition of the maintained
-implementation to `main` are tracked in [release status](docs/RELEASE_STATUS.md).
+Its original code and documentation remain unchanged in that snapshot. `main`
+provides the maintained workflow, with the original and refactoring commit history
+preserved. See [release status](docs/RELEASE_STATUS.md) for remote CI and the
+Docker image baseline.
 
 The historical snapshot supports inspection and comparison using its original
 entry points. The legacy `dataset_build/`, `runners/` and `experiment/` scripts

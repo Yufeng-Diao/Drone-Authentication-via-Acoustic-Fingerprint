@@ -15,7 +15,8 @@ the resolved versions and distribution hashes; `.python-version` selects the
 primary interpreter. Python 3.15 and free-threaded builds are outside this range.
 Ubuntu 24.04 is the supported and locally tested platform. The Ubuntu CI matrix
 in `.github/workflows/ci.yml` covers both interpreters. Windows and macOS are
-outside the current project scope; remote CI has not yet been executed.
+outside the current project scope. Both interpreter jobs passed
+[remote CI](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/actions/runs/39155417609); see [release status](RELEASE_STATUS.md).
 
 For deployment without host Python, use the [Docker and Compose guide](CONTAINER.md).
 The native instructions below are useful for source development and debugging.

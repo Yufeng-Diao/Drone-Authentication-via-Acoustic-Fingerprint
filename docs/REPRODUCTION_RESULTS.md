@@ -119,8 +119,10 @@ renders its offline closure report after validation and review pass. These tools
 are phase-evidence helpers; ordinary users generate their own scientific gallery
 with the documented `drone-auth paper` and `drone-auth plot` commands.
 
-Ubuntu local acceptance is complete. Remote CI, repository push and publication
-are separate release actions. Existing container smoke checks cover Linux/amd64;
+Ubuntu local acceptance is complete. Both interpreter jobs also passed remote CI;
+the maintained `main` and original `legacy/acsac2022` branches are published.
+See [release status](RELEASE_STATUS.md) for those checks and the Docker Hub image.
+Container smoke checks cover Linux/amd64;
 the full sweep ran natively on Ubuntu. LaTeX table fragments were exported but not
 compiled. The within-recording split does not test unseen recordings, rooms or
 adversarial replay attacks.
