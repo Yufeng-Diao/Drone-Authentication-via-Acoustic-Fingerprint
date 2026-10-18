@@ -145,7 +145,9 @@ Numerical work runs on the main thread with a one-thread BLAS/OpenMP limit using
 [threadpoolctl](https://github.com/joblib/threadpoolctl). RF and KNN also explicitly
 use one worker. The existing heartbeat thread only reports elapsed time. These
 execution controls avoid nested parallelism; classifier formulas, seeds and
-iteration budgets remain unchanged. Full eight-model convergence testing is P4.
+iteration budgets remain unchanged. All eight models were subsequently exercised
+in the full P6 run; [recorded convergence warnings](REPRODUCTION_RESULTS.md#reproducibility-and-measured-resources)
+remain part of the results, and completed execution does not imply convergence.
 
 ## Atomic writes and interrupted work
 

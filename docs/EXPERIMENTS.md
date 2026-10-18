@@ -36,12 +36,21 @@ the preset list, retaining selectors for presets already in the file and using
 the complete frozen grid for other named presets. CLI overrides do not rewrite
 configuration files. Use `--dry-run` to inspect the resolved tasks first.
 
-## Full coverage, without launching it accidentally
+## Full paper coverage
 
 ```bash
 uv run --locked drone-auth paper \
   --config config/paper/full_sweep.json --dry-run
+uv run --locked drone-auth paper \
+  --config config/paper/full_sweep.json \
+  --audio-root ../refactor_artifacts/data/acsac2022/extracted \
+  --output ../refactor_artifacts/runs/full-paper-001 \
+  --cache-root ../refactor_artifacts/cache/paper-features \
+  --log-root ../refactor_evidence/full-paper-001/attempts
 ```
+
+The second command starts the full experiment. For the result-by-result mapping,
+monitor setup and plotting commands, see the [README workflow](../README.md#reproduce-the-paper-experiments).
 
 | Preset | Fits | Evaluation-only tasks | Configuration |
 | --- | ---: | ---: | --- |
@@ -52,6 +61,10 @@ uv run --locked drone-auth paper \
 | `figure5` | 0 | 744 | Table 2 models × 93 SNR levels |
 | `tables4_5` | 80 | 0 | 10 frozen 8/8/8 partitions × 8 models |
 | Total | 4,096 | 4,344 | 8,440 unique tasks, excluding retries |
+
+Rows count each clean fit once across the full plan. Figure 4 alone needs 3,600
+clean fits plus 3,600 evaluations; Figure 5 alone needs eight clean fits plus
+744 evaluations.
 
 Selecting Figure 4 or Figure 5 automatically includes its required clean fits,
 without duplicating a clean task already selected in the same plan. Evaluation
@@ -70,8 +83,10 @@ The dry run reads JSON manifests only. It reports train/test row counts, selecte
 columns, task dependencies and raw base-plus-selected array bytes for each task.
 These are per-task sizes before cache sharing, not a prediction of total disk,
 peak estimator memory or runtime. The feature writer checks available disk space
-before allocating an array. Estimators can allocate additional memory. Full-grid
-training and its resource requirements remain release-phase work.
+before allocating an array. Estimators can allocate additional memory. The
+completed full run took about 11 hours on the validation host, retained 30.06 GiB
+of results plus 26.14 GiB of cache, and reached 1.94 GiB peak process RSS. These
+are observations, not limits or guarantees; see the [resource report](REPRODUCTION_RESULTS.md#reproducibility-and-measured-resources).
 
 ## Configuration for researchers
 

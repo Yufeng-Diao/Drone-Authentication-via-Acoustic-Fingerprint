@@ -5,8 +5,9 @@ closed/open-set evaluation and checked completion reuse. See the [numerical
 validation guide](NUMERICAL_VALIDATION.md) for P2 options and scientific changes.
 The pipeline uses [indexed reads and shared binary caches](DATA_PIPELINE.md).
 [Paper presets](EXPERIMENTS.md) and [saved-result plots](FIGURES.md) are implemented;
-full-grid execution remains release-phase work. Use the [frozen protocol](PAPER_PROTOCOL.md) for the
-scientific specification. Python 3.8 and the old Conda environment are unnecessary.
+the [full updated run](REPRODUCTION_RESULTS.md) is complete. The root
+[README](../README.md) gives the end-to-end workflow and per-result commands.
+Use the [frozen protocol](PAPER_PROTOCOL.md) for the scientific specification. Python 3.8 and the old Conda environment are unnecessary.
 
 The tested primary interpreter is CPython **3.14.8**, with **3.13.16** as the
 compatibility target. Both use ordinary GIL-enabled builds. `uv.lock` contains
@@ -19,9 +20,10 @@ outside the current project scope; remote CI has not yet been executed.
 ## Install with uv
 
 Install **uv 0.13.0** using the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/).
-For example, with an existing Python/pip installation, run
-`python -m pip install --user uv==0.13.0` and ensure its scripts directory is on
-PATH. The project's uv version requirement rejects a different uv version.
+The [README installation steps](../README.md#install-and-set-paths) bootstrap uv
+in an external venv, avoiding changes to Ubuntu's system Python packages. Ensure
+that venv's `bin` directory is on PATH. The project's uv version requirement
+rejects a different uv version.
 Run the following from the repository root. Keep data, environments, caches,
 outputs and logs in sibling directories. `uv sync --locked` must not rewrite
 the lockfile. Its default editable install is useful when changing the code.

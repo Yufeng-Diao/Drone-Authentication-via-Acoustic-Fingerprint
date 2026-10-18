@@ -87,7 +87,9 @@ output directory is required; existing figures and input sweeps are preserved.
 ## Compare new results with the published figure images
 
 `tools/report_paper_comparison.py` reads a completed gallery and redraws Figures
-2–5 using the author's historical plotting styles. It preserves all 8,352 measured
+2–5 using the author's historical plotting styles. This helper requires a full-data,
+complete gallery containing all eight classifiers and all 8,352 figure points;
+a single-preset or validation-subset gallery is insufficient. It preserves all 8,352 measured
 points and the model-name mapping. It creates an offline side-by-side report,
 standalone PNG/SVG/PDF plots, comparison PDFs and individual Figure 3/4 panels.
 It does not train or load models, features or audio.

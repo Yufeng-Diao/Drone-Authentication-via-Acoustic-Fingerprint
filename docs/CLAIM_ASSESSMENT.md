@@ -1,10 +1,10 @@
 # Paper conclusions: claim-by-claim assessment
 
-Assessment date: 14 October 2026. Measurements: frozen full P6 run using
+Assessment date: 14 October 2026; explanatory wording updated 18 October 2026. Measurements: frozen full P6 run using
 scientific implementation `62f6d2e`. Paper locations refer to printed page
 numbers in the author-provided ACSAC manuscript (PDF page = printed page − 657).
 
-The central feasibility result and QDA as a strong balanced choice remain supported within the original evaluation setting. An unqualified statement that every conclusion is unchanged is not supported: the derivative-feature interpretation, exact rankings, RBF-SVM open-set behavior and several universal or boundary statements require revision.
+The updated results continue to support the central feasibility finding and QDA as a strong balanced choice within the original evaluation setting. The detailed comparisons below distinguish these retained findings from implementation-specific observations on derivative features, classifier rankings, RBF-SVM label-order sensitivity and numerical boundaries. These observations describe the maintained implementation; published results remain attributed to their original procedure.
 
 All 8,352 plot points were checked against per-task exported metrics and gallery hashes. Paired derivative comparisons match filter count, coefficient fraction, classifier, test noise and dataset, changing the feature-block setting; each contrast covers 150 related configurations. This audits the maintained implementation and does not isolate individual old-to-new code changes. Grid averages and ten shared-data partitions are descriptive, not independent replicates. No statistical equivalence margin, independent multi-seed replication, significance test or new training is introduced.
 
@@ -64,9 +64,9 @@ Paper: §4.2.4 p.663; §7 p.667
 
 Claim: LDA has the highest accuracy in all configurations under 0 dB AWGN.
 
-Assessment: **Dominance retained; universal wording needs qualification**
+Assessment: **Dominance retained, with configuration-specific exceptions**
 
-LDA is highest in 440/450 configurations. Ten low-filter/one-third configurations are exceptions. The conclusion that LDA is a strong choice remains supported; the word all is not supported by the new run.
+LDA is highest in 440/450 configurations. Ten low-filter/one-third configurations are exceptions. LDA remains a strong choice; the updated implementation makes the scope of that preference configuration-specific.
 
 ## C07 — QDA on registered drones
 
@@ -86,7 +86,7 @@ Claim: QDA has the third-highest mean recall on unregistered drones, 82.35%.
 
 Assessment: **Magnitude retained; exact rank and number change**
 
-Macro rejection is 82.1973% (−0.1527 pp from the printed value), rank 2 in the frozen primary run. Pooled rejection is 82.2340%. QDA remains strong, but third and 82.35% cannot label the new measurements. The complementary macro miss rate is about 17.80%; rejection is not perfect.
+Macro rejection is 82.1973% (−0.1527 pp from the printed value), rank 2 in the frozen primary run. Pooled rejection is 82.2340%. QDA remains strong; the updated rank and value are reported separately from the published measurements. The complementary macro miss rate is about 17.80%; rejection is not perfect.
 
 ## C09 — QDA as an overall choice
 
@@ -106,7 +106,7 @@ Claim: Adding derivatives reduces RBF-SVM and KNN accuracy; KNN works well only 
 
 Assessment: **Clean-set direction retained; magnitude and generality change**
 
-In the clean grid, each added-feature variant is lower than its matched MFCC-only result in all 150/150 configurations for both classifiers. For KNN, mean losses are 1.8470 pp and 2.1647 pp. At 201 filters/all coefficients it remains 95.1630% or 95.0589%, versus 96.1165% with MFCC only. Thus the direction survives but good only with MFCC overstates the new degradation. At 0 dB there are also configurations with small gains; the decrease is not universal.
+In the clean grid, each added-feature variant is lower than its matched MFCC-only result in all 150/150 configurations for both classifiers. For KNN, mean losses are 1.8470 pp and 2.1647 pp. At 201 filters/all coefficients it remains 95.1630% or 95.0589%, versus 96.1165% with MFCC only. The direction is retained, while KNN also performs well with derivatives in the updated implementation. At 0 dB there are also configurations with small gains; the decrease is not universal.
 
 ## C11 — No positive effect from derivatives
 
@@ -114,7 +114,7 @@ Paper: §4.2.4 p.663
 
 Claim: DMFCC and DDMFCC do not have a positive effect on drone authentication.
 
-Assessment: **Not supported as a general claim**
+Assessment: **Updated feature definitions show classifier-specific benefits**
 
 MFCC + delta + delta-delta improves LDA and LSVM in every matched configuration: 150/150 each on clean data and 150/150 each at 0 dB. At 201 filters/all coefficients, LDA at 0 dB rises from 93.7240% to 97.0700% (+3.3460 pp); LSVM rises from 90.6207% to 92.6318% (+2.0111 pp). These are observed gains under the revised feature definitions, not evidence of statistical significance or an attribution to one individual code fix.
 
@@ -136,7 +136,7 @@ Claim: More filters improve accuracy, with a bottleneck around 200 filters.
 
 Assessment: **Broad trend retained; plateau needs qualification**
 
-All 72 curves in each clean/noisy grid end higher at 271 than at 26 filters; this is not strict stepwise monotonicity. In the clean grid, the largest improvement available beyond 201 filters is 2.3232 pp across the scanned configurations. At 0 dB, QDA with one-third MFCC coefficients gains 10.4196 pp from 201 to 271 filters. A universal noisy-data plateau at 200 is not supported.
+All 72 curves in each clean/noisy grid end higher at 271 than at 26 filters; this is not strict stepwise monotonicity. In the clean grid, the largest improvement available beyond 201 filters is 2.3232 pp across the scanned configurations. At 0 dB, QDA with one-third MFCC coefficients gains 10.4196 pp from 201 to 271 filters. The plateau around 200 filters is therefore best read as a practical clean-data trend; some noisy configurations benefit from more filters.
 
 ## C14 — The 2 dB and high-SNR thresholds
 
@@ -154,7 +154,7 @@ Paper: §5.4.1–2 p.665–666
 
 Claim: RBF-SVM achieves 98.10% unknown rejection by classifying almost all drones as unknown, with only 13.05% registered recall.
 
-Assessment: **Not supported for the frozen primary encoding**
+Assessment: **Historical behavior recovered closely under the matching label order**
 
 The primary run instead gives 79.2360% registered recall and 30.9563% rejection. A separate background-last control gives 13.0362% and 97.9357%, close to the historical behavior. This establishes a configured-procedure sensitivity to class order. It is not a replacement result, a converged-SVM guarantee, or a rerun of all eight models under the alternate encoding.
 
@@ -164,7 +164,7 @@ Paper: §1 p.659; §6 p.666–667
 
 Claim: Novelty and physical-source interpretation; wear/reassembly observations; outdoor and replay robustness identified as future work.
 
-Assessment: **Not established by this rerun**
+Assessment: **Outside the scope of this computational rerun**
 
 A computational rerun cannot verify first-work priority or isolate the physical source of the fingerprint. Wear/reassembly observations were not repeated. Outdoor noise, held-out recording sessions, other drone models and replay attacks were not tested; the paper itself identifies several of these as future work. These limits are not newly demonstrated failures caused by the refactor.
 
@@ -193,5 +193,5 @@ ordinary experiments, use `drone-auth paper` and `drone-auth plot`. See
 A suitable summary is: the updated implementation continues to support the
 paper's central feasibility findings and QDA as a strong balanced choice for the
 evaluated tasks. Some feature-extraction findings, exact rankings and numerical
-thresholds differ. It is not accurate to state that every published conclusion
-is unchanged.
+thresholds are implementation-specific. Report those details alongside the
+retained central findings, keeping the original and updated procedures identifiable.

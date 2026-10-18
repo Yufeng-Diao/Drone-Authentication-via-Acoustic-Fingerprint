@@ -1,4 +1,4 @@
-# Full corrected rerun and differences from the paper
+# Updated full-run results and comparison with the paper
 
 The full Ubuntu run completed on 14 October 2026 using the frozen implementation
 at `62f6d2e`, Python 3.14.8 and the committed dependency lock. All 8,440 planned
@@ -6,15 +6,19 @@ tasks completed in one attempt each: 4,096 fits and 4,344 evaluations of existin
 clean models. The complete Figures 2–5 contain 8,352 measured points. Tables 2–5
 and the diagnostic plots are exported from verified saved predictions.
 
-This establishes execution of the corrected protocol. It does **not** establish
-exact recovery of every score in the historical paper. Keep the original paper,
-primary rerun and controlled diagnostics distinct when reporting results.
-The [claim-by-claim assessment](CLAIM_ASSESSMENT.md) identifies which scientific
-conclusions remain supported and which statements need qualification.
+The updated run continues to support the paper's central feasibility findings
+and QDA as a strong balanced authentication choice within the original evaluation
+setting. Closed-set scores remain close to the published measurements. Updated
+feature definitions and explicit implementation conventions also yield some
+configuration-specific differences, detailed below. Published values, the primary
+rerun and controlled diagnostics are reported separately for clear attribution.
+The [claim-by-claim assessment](CLAIM_ASSESSMENT.md) explains the retained findings
+and the scope of these additional observations; exact recovery of every
+historical score is not claimed.
 
 ## Closed-set authentication
 
-| Classifier | Published Table 2 accuracy (%) | Corrected rerun (%) | Difference (percentage points) |
+| Classifier | Published Table 2 accuracy (%) | Updated rerun (%) | Difference (percentage points) |
 | --- | ---: | ---: | ---: |
 | QDA | 96.20 | 96.2034 | +0.0034 |
 | LDA | 92.43 | 92.4298 | -0.0002 |
@@ -30,7 +34,7 @@ Table 2 difference is 0.3306 percentage points. QDA, LDA and LSVM agree with all
 four printed metrics at two-decimal precision. Printed values are rounded; the
 new unrounded values are retained in the external results.
 
-## Open-set label ordering is consequential
+## Open-set results and label-order sensitivity
 
 The frozen modern protocol uses registered identities 1–24 and background label
 0. The historical PKL trainer used drone labels 0–23 and background label 24.

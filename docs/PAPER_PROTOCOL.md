@@ -9,7 +9,9 @@ rules for individual closed/open-set tasks; see [numerical validation](NUMERICAL
 P4 connects the complete experiment runner to these presets; see
 [experiment execution and recovery](EXPERIMENTS.md). The frozen JSON status text
 records the P0 snapshot, not current implementation progress. These stages do
-not establish full paper reproduction. P4 also retains the historical QDA SVD
+not on their own establish full paper reproduction. P6 subsequently completed
+the full run; see the [measured results](REPRODUCTION_RESULTS.md) and
+[execution instructions](../README.md#reproduce-the-paper-experiments). P4 also retains the historical QDA SVD
 fit through an [explicit compatibility implementation](MODEL_MIGRATION.md#p4-qda-fit-compatibility).
 
 The scientific reference is [Drone Authentication via Acoustic Fingerprint](https://doi.org/10.1145/3564625.3564653),
