@@ -50,11 +50,13 @@ The supported execution path is `src/drone_fingerprint/`, with the attributed
 MFCC core in `toolbox/mfcc_base.py` and `toolbox/mfcc_sigproc.py`. Researchers can
 follow the module map and examples in [the development guide](DEVELOPMENT.md).
 
-`experiment/`, `runners/` and the remaining historical toolbox wrappers are kept
-for comparison with the original release. Their original imports, dependencies
-and generated-directory conventions are not the modern workflow. No compatibility
-with those entry points is implied by modern CLI tests. Use the explicitly labelled
-[historical guide](LEGACY_WORKFLOW.md) only when investigating the old implementation.
+Legacy experiment scripts, runners, PKL generators, unused toolbox wrappers,
+YAML configurations, the Conda environment, tutorial screenshots and empty
+output placeholders have been removed from the maintained tree. They remain
+available in the frozen original branch. No compatibility with those entry points
+is implied by modern CLI tests. Use the [historical guide](LEGACY_WORKFLOW.md)
+when investigating the old implementation. The MFCC core, classifier definitions,
+paper manifests and dependency lock are unchanged by this source-tree cleanup.
 
 The paper's alternating within-recording train/test split is retained. Results
 do not establish recording-held-out, unseen-room or adversarial replay robustness.

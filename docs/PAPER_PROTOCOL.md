@@ -2,7 +2,8 @@
 
 P0 establishes the data and experimental specification for **acsac2022-modern-v1**.
 It does not implement the new training pipeline or claim to reproduce the paper's
-numerical results. The legacy entry points do not consume these JSON files yet.
+numerical results. The legacy entry points in the [original release](LEGACY_WORKFLOW.md)
+do not consume these JSON files.
 P1 provides a locked modern environment; see the [quickstart](QUICKSTART.md).
 The platform target is Ubuntu. P2 implements and validates corrected numerical
 rules for individual closed/open-set tasks; see [numerical validation](NUMERICAL_VALIDATION.md).
@@ -44,7 +45,9 @@ Use the [published dataset](https://doi.org/10.5525/gla.researchdata.1348), lice
 CC BY 4.0. The archive SHA-256 is recorded in `recordings.json`. The archive contains
 256 drone WAV files and one room-noise WAV, all mono 16-bit PCM at 44.1 kHz.
 
-The date selection in historical `toolbox/name_set.py` retains 240 drone files:
+The date selection in historical
+[`toolbox/name_set.py`](https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint/blob/88d0098b189b8cb48da3ec05ab81f7890b36d6b5/toolbox/name_set.py)
+retains 240 drone files:
 five distance pairs for each of 24 identities. Their total duration is
 29,285.791746 seconds, matching Table 1's 29,285.79 seconds. Sixteen additional
 files dated 2022-02-27 remain in the manifest with `legacy_date_selected: false`.

@@ -7,7 +7,8 @@ the archived pre-optimization implementation.
 
 The maintained entry point is `drone-auth`. Ubuntu 24.04, CPython 3.14.8 and
 3.13.16, and the existing `uv.lock` are the acceptance targets. The historical
-`runners/`, `experiment/`, and PKL/CSV generation scripts remain reference code;
+`runners/`, `experiment/`, and PKL/CSV generation scripts are preserved in
+[the original release](LEGACY_WORKFLOW.md), outside the maintained tree;
 they have not been repaired or certified for the new environment. In particular,
 do not use their filename checks, noise generation or derivative calculations
 as the corrected workflow. The shared MFCC numerical core and its attribution

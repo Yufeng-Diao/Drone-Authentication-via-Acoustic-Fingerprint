@@ -167,7 +167,7 @@ path. Its source-tree cache is disabled. To exercise 3.13 independently, point
 The direct code path is `cli.py` → `config.py` / `data.py` → `features.py` →
 `models.py` → `workflow.py`. These modules live in `src/drone_fingerprint`.
 `features.py` calls the original `toolbox/mfcc_base.py` and `mfcc_sigproc.py`;
-their numerical core and attribution remain intact. `toolbox/__init__.py` now
-loads the legacy `CMatrix` export on demand so numerical imports do not pull in
-unrelated plotting packages. The historical scripts remain reference code and
-are not certified against the new minimal dependency set.
+their numerical core and attribution remain intact. `toolbox/` contains only
+these numerical modules, a package initializer and their license. Plotting lives
+in `src/drone_fingerprint/plotting.py`; the old `CMatrix` export and historical
+scripts are available only in [the original release](LEGACY_WORKFLOW.md).

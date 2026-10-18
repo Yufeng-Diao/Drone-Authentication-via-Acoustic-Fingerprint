@@ -1,9 +1,10 @@
 # Extend the research workflow
 
 Use an editable locked installation from [the quickstart](QUICKSTART.md).
-The maintained implementation uses plain functions and dataclasses. The
-historical `experiment/`, `runners/` and legacy toolbox wrappers are reference
-code, not the maintained CLI. No plugin framework is needed to modify a study.
+The maintained implementation uses plain functions and dataclasses. Historical
+experiment scripts, runners and unused toolbox wrappers have been removed from
+this tree; inspect them through the [original release](LEGACY_WORKFLOW.md).
+No plugin framework is needed to modify a study.
 
 | Research question | Start here |
 | --- | --- |

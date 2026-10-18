@@ -353,9 +353,23 @@ preserved. See [release status](docs/RELEASE_STATUS.md) for remote CI and the
 Docker image baseline.
 
 The historical snapshot supports inspection and comparison using its original
-entry points. The legacy `dataset_build/`, `runners/` and `experiment/` scripts
-are outside the maintained environment; use `drone-auth` for the workflow above.
-See the [historical workflow reference](docs/LEGACY_WORKFLOW.md).
+entry points. Legacy scripts, YAML configurations, the Conda environment and
+generated-output placeholder folders have been removed from the maintained tree.
+Use `drone-auth` for the workflow above; use the
+[historical workflow reference](docs/LEGACY_WORKFLOW.md) to inspect the original release.
+
+The maintained source tree is organized as follows:
+
+| Path | Purpose |
+| --- | --- |
+| `src/drone_fingerprint/` | CLI, features, models, experiment execution, monitoring and plotting |
+| `toolbox/` | Shared MFCC numerical core and its license |
+| `config/paper/`, `config/smoke/`, `config/validation/` | Frozen paper protocol and executable JSON configurations |
+| `examples/`, `docs/` | Research extensions and usage guides |
+| `tests/`, `tools/` | Regression tests, validation and evidence-generation utilities |
+
+Store audio, caches, models, results and logs outside this tree using the paths
+configured above.
 
 ## Further guides
 
