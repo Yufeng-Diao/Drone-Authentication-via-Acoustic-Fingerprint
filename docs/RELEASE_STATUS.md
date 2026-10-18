@@ -89,3 +89,15 @@ If publishing these bundles separately as release assets or a report site, add
 links only after the public destination exists and has been checked. Do not put
 local workspace paths in the public README or commit runtime evidence to make
 those paths appear to work.
+
+
+## Docker Hub release — 18 October 2026
+
+The validated Linux/amd64 image is publicly available as
+[`eidos1970/drone-acoustic-fingerprint:2026.10.18`](https://hub.docker.com/r/eidos1970/drone-acoustic-fingerprint).
+Its source revision is `7aa6c2a468796bb01a9a9b0b21a2e8fef6e6778e`.
+The [container guide](CONTAINER.md#image-availability-and-validation) records its
+immutable digest and checks. Anonymous registry access returned the validated
+image; an execution check uses the digest directly. Docker Hub publication is
+separate from the pending GitHub branch publication and remote CI. No full-paper
+container training or additional architecture validation is implied.

@@ -1,6 +1,6 @@
 # Ubuntu Docker Engine, linux/amd64. No host Python installation is required.
 x-runtime: &runtime
-  image: ${DRONE_IMAGE:-drone-auth:local}
+  image: ${DRONE_IMAGE:-eidos1970/drone-acoustic-fingerprint:2026.10.18}
   platform: linux/amd64
   user: "${LOCAL_UID:?Export LOCAL_UID using id -u}:${LOCAL_GID:?Export LOCAL_GID using id -g}"
   read_only: true

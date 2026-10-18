@@ -10,8 +10,26 @@ Docker Desktop is not required.
 
 ## Image availability and validation
 
-A Docker Hub release is being prepared; no public image reference is advertised
-until push and pull verification succeed. Build locally using the next section.
+The public image is [eidos1970/drone-acoustic-fingerprint](https://hub.docker.com/r/eidos1970/drone-acoustic-fingerprint),
+release **2026.10.18**, for **Linux/amd64**. It was published on 18 October 2026
+from source commit `7aa6c2a468796bb01a9a9b0b21a2e8fef6e6778e`. Anonymous pull
+verification returned the same image ID as the locally validated release.
+
+```bash
+docker pull eidos1970/drone-acoustic-fingerprint:2026.10.18
+```
+
+For a fixed research baseline, set `DRONE_IMAGE` to this immutable reference:
+
+```dotenv
+DRONE_IMAGE=eidos1970/drone-acoustic-fingerprint@sha256:76eacdf0832c00250c4e69c00f985bbe79c9d4268afb006fb8a604d61082e572
+```
+
+The subsequent documentation changes advertise this existing image; they do not
+replace its contents or change the validated scientific implementation. The
+pull check used an empty Docker credential directory and reused local layer
+cache; it was not a fresh-machine download or a new full-paper training run.
+
 The image contains the CLI, frozen experiment configurations, the paper-comparison
 helper, Poppler and portable Liberation fonts. It excludes datasets, PDFs,
 credentials, private source, models, caches and experiment logs.
@@ -78,7 +96,7 @@ If using a published image, set `DRONE_IMAGE` to its exact reference and run:
 docker compose --env-file "$DRONE_ENV" pull
 ```
 
-For a local build, leave `DRONE_IMAGE=drone-auth:local`:
+For a local build, change the example's published reference to `DRONE_IMAGE=drone-auth:local`:
 
 ```bash
 docker build --platform linux/amd64 \

@@ -23,8 +23,16 @@ For running experiments without installing host Python, use the
 [Docker and Compose workflow](docs/CONTAINER.md). One image provides training,
 port-8765 live monitoring, result plotting and paper-style comparisons. Data,
 models and logs stay in explicit host directories. Copy `docker.env.example`
-outside the checkout and set your paths. Docker Hub publication is being prepared;
-local image builds are documented now.
+outside the checkout and set your paths. The prebuilt Linux/amd64 image is available
+on [Docker Hub](https://hub.docker.com/r/eidos1970/drone-acoustic-fingerprint):
+
+```bash
+docker pull eidos1970/drone-acoustic-fingerprint:2026.10.18
+```
+
+The release was verified with anonymous registry access and matches the validated
+image. See the [container guide](docs/CONTAINER.md#image-availability-and-validation)
+for its immutable digest, source revision and validation scope.
 
 The native workflow below remains useful for modifying and debugging the research
 code. Both methods use the same implementation and dependency lock.
