@@ -17,6 +17,18 @@ implementation also provides further observations on feature settings and some
 classifier behaviors. See [results and interpretation](#results-and-interpretation)
 for the measured comparisons and their scope.
 
+## Choose a deployment method
+
+For running experiments without installing host Python, use the
+[Docker and Compose workflow](docs/CONTAINER.md). One image provides training,
+port-8765 live monitoring, result plotting and paper-style comparisons. Data,
+models and logs stay in explicit host directories. Copy `docker.env.example`
+outside the checkout and set your paths. Docker Hub publication is being prepared;
+local image builds are documented now.
+
+The native workflow below remains useful for modifying and debugging the research
+code. Both methods use the same implementation and dependency lock.
+
 ## Workflow
 
 1. [Install the locked environment and set paths](#install-and-set-paths).

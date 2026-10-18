@@ -1,0 +1,97 @@
+# Ubuntu Docker Engine, linux/amd64. No host Python installation is required.
+x-runtime: &runtime
+  image: ${DRONE_IMAGE:-drone-auth:local}
+  platform: linux/amd64
+  user: "${LOCAL_UID:?Export LOCAL_UID using id -u}:${LOCAL_GID:?Export LOCAL_GID using id -g}"
+  read_only: true
+  tmpfs:
+    - /tmp
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging:
+    driver: local
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  train:
+    <<: *runtime
+    network_mode: none
+    stop_signal: SIGINT
+    stop_grace_period: 2m
+    volumes:
+      - type: bind
+        source: ${AUDIO_DIR:?Set AUDIO_DIR in the external env file}
+        target: /audio
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${RUNS_DIR:?Set RUNS_DIR}
+        target: /runs
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${CACHE_DIR:?Set CACHE_DIR}
+        target: /cache
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${LOGS_DIR:?Set LOGS_DIR}
+        target: /logs
+        bind: {create_host_path: false}
+    command: [paper, --config, "${PAPER_CONFIG:-/opt/drone/config/validation/paper_smoke.json}", --audio-root, /audio, --output, "/runs/${RUN_NAME:-paper-smoke-001}", --cache-root, /cache, --log-root, "/logs/${RUN_NAME:-paper-smoke-001}", --resume]
+
+  monitor:
+    <<: *runtime
+    # Preserve loopback-only HTTP and observe the trainer's Linux lock/PID.
+    network_mode: host
+    pid: host
+    volumes:
+      - type: bind
+        source: ${RUNS_DIR:?Set RUNS_DIR}
+        target: /runs
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${LOGS_DIR:?Set LOGS_DIR}
+        target: /logs
+        read_only: true
+        bind: {create_host_path: false}
+    command: [monitor, --run, "/runs/${RUN_NAME:-paper-smoke-001}", --log-root, "/logs/${RUN_NAME:-paper-smoke-001}", --port, "${MONITOR_PORT:-8765}"]
+
+  plot:
+    <<: *runtime
+    profiles: [tools]
+    network_mode: none
+    volumes:
+      - type: bind
+        source: ${RUNS_DIR:?Set RUNS_DIR}
+        target: /runs
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${FIGURES_DIR:?Set FIGURES_DIR}
+        target: /figures
+        bind: {create_host_path: false}
+    command: [plot, --paper-dir, /opt/drone/config/paper, --runs, "/runs/${RUN_NAME:-paper-smoke-001}", --output, "/figures/${GALLERY_NAME:-paper-smoke-001}"]
+
+  compare:
+    <<: *runtime
+    profiles: [tools]
+    network_mode: none
+    entrypoint: [python, /opt/drone/tools/report_paper_comparison.py]
+    volumes:
+      - type: bind
+        source: ${FIGURES_DIR:?Set FIGURES_DIR}
+        target: /figures
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PAPER_DIR:?Set PAPER_DIR}
+        target: /paper
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${COMPARISONS_DIR:?Set COMPARISONS_DIR}
+        target: /comparisons
+        bind: {create_host_path: false}
+    command: [--gallery, "/figures/${GALLERY_NAME:-paper-smoke-001}", --paper-pdf, /paper/ACSAC_Yufeng.pdf, --output, "/comparisons/${COMPARISON_NAME:-paper-comparison-001}"]

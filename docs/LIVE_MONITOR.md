@@ -117,10 +117,16 @@ model limit or resume rule. This addition changes executable source identity;
 old P4/P5 sweeps remain viewable, but their source-bound training resume should
 not be forced across revisions. Start P6 from the final validated revision.
 
-For Docker training, run the monitor **natively on the Ubuntu host**, pointing it
-at the host bind-mount directories. The host can observe the container runner's
-Linux lock and PID without exposing the Docker socket to the webpage. The
-monitor resolves log basenames beneath the explicit host `--log-root`, so `/logs`
-inside the training container need not equal the host log path. Keep original
-WAV mounts read-only as shown in [the container guide](CONTAINER.md). Serving the
-monitor inside an isolated container is not the supported monitoring topology.
+For Docker training, the [Compose workflow](CONTAINER.md) runs the monitor from
+the same image as training; no host Python installation is required. Its monitor
+service uses host networking and host PID visibility on Ubuntu, preserving the
+loopback-only URL and Linux lock/PID observation. Run/log directories are mounted
+read-only. No Docker socket or privileged container is needed. This topology
+shares the host process view and is intended for a trusted research host; isolated
+PID namespaces or restricted process permissions cannot provide the same liveness
+observation. See the container guide for the tested platform and limitations.
+
+The native host monitor remains supported as an alternative. Point it at the
+host run/log bind directories; log basenames are resolved beneath the explicit
+host log root. A fully isolated bridge-network monitor is not the supplied
+configuration. Do not add a public bind address to work around forwarding.

@@ -84,6 +84,10 @@ metrics and confusion matrices are checked before creating output. A fresh
 output directory is required; existing figures and input sweeps are preserved.
 
 
+The [Docker workflow](CONTAINER.md#plot-saved-results) provides the same plot
+command without host Python. Its `compare` service includes the helper below,
+Poppler and fonts; the paper PDF stays an external read-only mount.
+
 ## Compare new results with the published figure images
 
 `tools/report_paper_comparison.py` reads a completed gallery and redraws Figures

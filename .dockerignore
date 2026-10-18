@@ -19,3 +19,6 @@
 !config/validation/**
 **/__pycache__
 **/*.pyc
+
+!tools/
+!tools/report_paper_comparison.py

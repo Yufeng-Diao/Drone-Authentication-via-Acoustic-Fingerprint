@@ -17,6 +17,9 @@ Ubuntu 24.04 is the supported and locally tested platform. The Ubuntu CI matrix
 in `.github/workflows/ci.yml` covers both interpreters. Windows and macOS are
 outside the current project scope; remote CI has not yet been executed.
 
+For deployment without host Python, use the [Docker and Compose guide](CONTAINER.md).
+The native instructions below are useful for source development and debugging.
+
 ## Install with uv
 
 Install **uv 0.13.0** using the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/).

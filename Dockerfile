@@ -5,6 +5,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 PYTHONPATH="" \
     MPLBACKEND=Agg MPLCONFIGDIR=/tmp/matplotlib \
     OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
     UV_PROJECT_ENVIRONMENT=/opt/drone/venv UV_CACHE_DIR=/tmp/uv-cache
+RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
 RUN python -m pip install --no-cache-dir uv==0.13.0
 WORKDIR /opt/drone/source
 COPY pyproject.toml uv.lock .python-version README.md LICENSE LICENSE_sklearn_QDA ./
@@ -13,6 +15,12 @@ COPY toolbox/ toolbox/
 RUN uv sync --locked --no-dev --no-editable --python /usr/local/bin/python3.14 \
     && rm -rf /tmp/uv-cache
 COPY config/ /opt/drone/config/
+COPY tools/report_paper_comparison.py /opt/drone/tools/report_paper_comparison.py
+ARG SOURCE_REVISION=unknown
+LABEL org.opencontainers.image.title="Drone Authentication via Acoustic Fingerprint" \
+      org.opencontainers.image.source="https://github.com/Yufeng-Diao/Drone-Authentication-via-Acoustic-Fingerprint" \
+      org.opencontainers.image.revision="$SOURCE_REVISION" \
+      org.opencontainers.image.licenses="Apache-2.0"
 ENV PATH="/opt/drone/venv/bin:$PATH"
 USER 10001:10001
 WORKDIR /work
